@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "manohaircut",
+  "private_key_id": "d26f786e512dd705cec9fa6fd20d7fa768ecca82",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCvbZPyUY40bSTQ\nn+rU3jfO8jpXD7rzgTfOXWjGka67DfzUjPzXrpFTkDelilbCNeOhTlIb+GHeBrA4\nT7fCajgTpnZJiaLXAwaY3QMjFgACrT1xPqVP03fV6CZO571yDE6qaMkBVO3seBdh\nn3yZom2GMDxPLvZ+Muj5+RsKk3YFAMlZ44b5wSR3Et5/ty3THHQc529gF29uEhBm\nvGY40kScTgwHD24I7W/V4ciWAKIsw/7li2uqZEHuO8GJrfR5E6hSaFluT+Nyzhru\nyynZXO+x3inYoBuYusuD20svRCGNmXIhhnStBuI5ugEvuzurKiCmPNc3KRiJohTA\nnP0T4WrNAgMBAAECggEABZH1jzg64Jwbkw/qLAP599VLTW2M2oOpQuFGklGDX7dI\nER6rPj+cfS+t2KYtxDZjqdZGYf15wWFAfKqT/jVoXkAG7vr9Y5WEwttM/h2fdqD2\nEQ+zvjcLzcwJ1VpjMp5vQVbDlR9+JiftBCGahPf6QXcWyc6HBJxMt0010tjk99p6\n6mPt3wKVsiGNM5fOQD90WqP81LeBzLTPZEK1cZuweaXwv7YXGTPCf+P9kQuyV0Fl\nu0MZFOZFThfdjB99pwmWArGxUWXJ/jQlEJzRnGw7pNdsrJkLQ0LxebRnyhgwd73X\nlP/jwj55WNM4cp00+0x3XLf2fwNPUtWM49EdwPkJQQKBgQDs1BbzWSJqinhqrTDi\n7pg726G+70TTQO9ycfhFXeWGvFLAjODLJL4EowTuVg+AoxkBBIDdOft4Ue9YfR+j\nLciMtUeyGJN/oDydtnFZqLolXRJcVEiWuO9MixSjoNiC1zIYRFYw7OPPj9mMsNyA\nP6buZa69k5M1gjKLP30heRyjwQKBgQC9oQ64cG5qHhGr+YWat7DAbe2uI7+XPUn4\n5FcqpdL3663dXRDrQRW2gtbEp6Nfxcv2ocG8Zg11grBUGHlj6xdPNTW65QiwDnaj\nHDakalpNID8qWFg7uvm7zw4hpWhiCkG/j8+MGik2fOdXbmrP/AzRg1jgbRmc7eyK\nqJ/NkauaDQKBgQDUPqdq4+EyNnMAt8JuPoJ0cruckHbQFQwDNxzXnfUMMU7AfgEg\nTgd1xFuw9bPjB0hrXwvWOBakmFm2pjxqU6e+YuCkPd5CrOpmNZGUVuCsh6Li2C5N\n1eOwZ5zRoF8ps46TrPrJ0iPAaxz/N6oFzgXe9YYLJGzzsYF2xilwjEgcgQKBgBfY\nVdKJiMjdSRmYAd3ntVktOZMJOcFZ2qBqji91tKaqQy2v0z3R7FoL79fAwMF9TN2R\nj5wSNSUOrv+UKEeRO1ghd8Utob8Jwo9WL+TS3tIN+QNpIoc4RskAC2Xdt9eENKpS\n+iVC8OXCJREQeGv45N+/pYBrF6ptHK5+78FYzPxNAoGAOdJmM+h71Py99Seu+0Qj\npcR1W270KEztnngozjGRCbkcYKU2JjHbIkHsT0hGjGBgGPDOq7PV3eXT+GeWyziD\nB5PK6rYOk7EZDYuWULYwVGGTiXomMviIytLpwZrZ1dGqMIja+TM5ZWv3NFM7pLOJ\nGR1udopoHGrmxr6CPg40lAk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@manohaircut.iam.gserviceaccount.com",
+  "client_id": "115655534951284563250",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40manohaircut.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

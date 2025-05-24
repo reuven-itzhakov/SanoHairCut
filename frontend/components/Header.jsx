@@ -1,11 +1,13 @@
 import SideBar from "./SideBar.jsx"
+import { useState } from "react";
 
 function Header() {
+    const [isOpen, setIsOpen] = useState(false);
     return (
         <>
         <header className="flex items-center justify-between p-4 bg-gray-900 text-white">
             <h1 className="cursor-pointer text-4xl font-bold hover:opacity-60 duration-300">mano.</h1>
-            <svg className="cursor-pointer hover:opacity-60 duration-300" width="40px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"> {/*https://www.svgrepo.com/svg/369033/user-circle*/}
+            <svg onClick={() => setIsOpen(true)} className="cursor-pointer hover:opacity-60 duration-300" width="40px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"> {/*https://www.svgrepo.com/svg/369033/user-circle*/}
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
@@ -13,7 +15,7 @@ function Header() {
                 </g>
             </svg>
         </header>
-        <SideBar/>
+        <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         </>
     );
 }

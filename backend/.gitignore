@@ -1,0 +1,13 @@
+# Ignore sensitive files and folders
+firebase-admin.json
+.env
+
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -96,6 +96,17 @@ app.get("/api/appointments/:userId", async (req, res) => {
     const snap = await db.collection("appointments").where("userId", "==", req.params.userId).get();
     if (snap.empty) return res.json({ appointment: null });
     const doc = snap.docs[0];
+    const { date, time } = doc.data();
+    // Check if appointment is in the past (Israel time)
+    const now = new Date();
+    const appointmentDateTime = new Date(`${date}T${time}:00+03:00`); // Israel is UTC+3 in summer
+    if (appointmentDateTime < now) {
+      // Move to 'appointments_history' collection for analysis
+      await db.collection("appointments_history").add({ ...doc.data(), userId: req.params.userId, removedAt: now });
+      // Remove from active appointments
+      await db.collection("appointments").doc(doc.id).delete();
+      return res.json({ appointment: null });
+    }
     res.json({ appointment: { id: doc.id, ...doc.data() } });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch appointment" });

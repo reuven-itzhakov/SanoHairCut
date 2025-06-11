@@ -1,8 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../SideBar.jsx";
-import axios from "axios";
 import { updateEmail, sendEmailVerification, signOut, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth } from "../../firebase"; // Import auth from your firebase configuration
+import axios from "axios";
 
 function Profile() {
     const [user] = useContext(UserContext);

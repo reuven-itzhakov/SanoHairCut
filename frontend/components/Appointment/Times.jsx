@@ -100,7 +100,7 @@ function Times({ date, onSelect, userId }) {
   if (!date) return null;
   return (
     <div className="mt-4 p-4 bg-gray-100 rounded shadow">
-      <h2 className="text-lg font-bold mb-2">Available Times for {date.toLocaleDateString()}</h2>
+      <h2 className="text-lg font-bold mb-2">Available Times for {dayjs(date).format('DD/MM/YYYY')}</h2>
       {error && <div className="text-red-600 mb-2">{error}</div>}
       {loading && <div className="text-gray-500 mb-2">Loading...</div>}
       <div className="flex flex-wrap gap-2 mb-4">
@@ -136,7 +136,7 @@ function Times({ date, onSelect, userId }) {
       {appointment && (
         <div className="mt-6 p-4 bg-white rounded shadow text-center">
           <div className="text-lg font-semibold text-blue-700 mb-2">Appointment</div>
-          <div className="mb-2">{appointment.date.toLocaleDateString()} at {appointment.time}</div>
+          <div className="mb-2">{dayjs(appointment.date).format('DD/MM/YYYY')} at {appointment.time}</div>
           <button
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
             onClick={handleDelete}

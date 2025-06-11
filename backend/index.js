@@ -126,6 +126,36 @@ app.delete("/api/appointments/:userId", async (req, res) => {
   }
 });
 
+// Admin: Add available times for a specific date
+app.post("/api/admin/available-times", async (req, res) => {
+  const { uid, date, times } = req.body;
+  if (!uid || !date || !Array.isArray(times)) {
+    return res.status(400).json({ error: "Missing uid, date, or times" });
+  }
+  try {
+    // Check if user is admin
+    const userDoc = await db.collection("users").doc(uid).get();
+    if (!userDoc.exists || userDoc.data().isAdmin !== true) {
+      return res.status(403).json({ error: "Not authorized" });
+    }
+    // Add or update available times for the date (merge and sort)
+    const timesDocRef = db.collection("availableTimes").doc(date);
+    const timesDoc = await timesDocRef.get();
+    let newTimes = times;
+    if (timesDoc.exists) {
+      // Merge with existing times, remove duplicates, and sort
+      const existingTimes = timesDoc.data().times || [];
+      newTimes = Array.from(new Set([...existingTimes, ...times])).sort();
+    } else {
+      newTimes = times.slice().sort();
+    }
+    await timesDocRef.set({ times: newTimes });
+    res.json({ message: "Available times updated", times: newTimes });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update available times" });
+  }
+});
+
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from "../../firebase.js";
 
 function Signup({setTab}){
@@ -33,8 +33,9 @@ function Signup({setTab}){
         }
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-            console.log("User signed up:", userCredential);
+            await sendEmailVerification(userCredential.user);
             setData({ email: '', password: '', confirmPassword: '', error: '' });
+            // Optionally, show a message to check email for verification
         }
         catch (error) {
             switch (error.code) {

@@ -11,38 +11,31 @@ admin.initializeApp({
 const app = express();
 app.use(cors());
 app.use(express.json());
+const db = admin.firestore();
 
-// app.post("/api/signup", async (req, res) => {
-//   const { email, password } = req.body;
-//   if (!email || !password){
-//     return res.status(400).json({ error: 'Email and password are required' });
-//   }
-//   try {
-//     const userRecord = await admin.auth().createUser({
-//       email,
-//       password,
-//     });
-//     res.status(201).json({ message: 'User Created Successfully', uid: userRecord.uid });
-//   }
-//   catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// })
+// Get user profile
+app.get("/api/profile/:uid", async (req, res) => {
+  db.collection("users").doc(req.params.uid).get()
+  .then(docSnap => {
+    if (!docSnap.exists)
+      return res.status(404).json({ error: "User not found" });
+    res.json(docSnap.data());
+  }).catch(err => {
+    res.status(500).json({ error: "Failed to fetch profile" });
+  });
+});
 
-// app.post("/api/signin", async (req, res) => {
-//   const { email, password } = req.body;
-//   if (!email || !password) {
-//     return res.status(400).json({ error: 'Email and password are required' });
-//   }
-//   try {
-//     const userRecord = await admin.auth().getUserByEmail(email);
-//     // Here you would typically verify the password, but Firebase Auth does not allow direct password verification.
-//     // You would need to use Firebase Client SDK for that.
-//     res.status(200).json({ message: 'User signed in successfully', uid: userRecord.uid });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// })
+// Update user profile (first name)
+app.post("/api/profile/:uid", async (req, res) => {
+  db.collection("users").doc(req.params.uid).set(
+    { name: req.body.name },
+    { merge: true }
+  ).then(() => {
+    res.json({ message: "Profile updated!" });
+  }).catch(err => {
+    res.status(500).json({ error: "Failed to update profile" });
+  });
+});
 
 const PORT = 5000;
 app.listen(PORT, () => {

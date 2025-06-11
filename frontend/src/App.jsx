@@ -2,11 +2,12 @@ import Header from '../components/Header.jsx'
 import HomePage from '../components/Pages/HomePage.jsx'
 import Appointment from '../components/Pages/Appointment.jsx'
 import Settings from '../components/Pages/Settings.jsx'
+import Profile from '../components/Pages/Profile.jsx'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase.js';
-import { UserContext } from '../components/UserContext.jsx';
+import { UserContext } from '../components/SideBar.jsx';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" />} />
         <Route path="/settings" element={user ? <Settings /> : <Navigate to="/" />} />
+        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/" />} />
       </Routes>
     </UserContext.Provider>
     </>

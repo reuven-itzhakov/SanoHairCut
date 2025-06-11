@@ -3,7 +3,9 @@ import { auth } from '../firebase.js';
 import { onAuthStateChanged } from "firebase/auth";
 import User from './SideBar/User.jsx';
 import Guest from './SideBar/Guest.jsx';
-import { UserContext } from '../components/UserContext.jsx';
+import { createContext } from 'react';
+
+export const UserContext = createContext(null);
 
 function SideBar({isOpen, setIsOpen}) {
     const [ user, setUser ] = useContext(UserContext);

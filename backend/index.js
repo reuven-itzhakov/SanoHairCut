@@ -113,7 +113,13 @@ app.delete("/api/appointments/:userId", async (req, res) => {
     await db.collection("appointments").doc(doc.id).delete();
     // Add the time back to availableTimes
     const timesDocRef = db.collection("availableTimes").doc(date);
-    await timesDocRef.update({ times: admin.firestore.FieldValue.arrayUnion(time) });
+    await timesDocRef.update({
+      times: admin.firestore.FieldValue.arrayUnion(time)
+    });
+    // Sort the times array after adding
+    const updatedDoc = await timesDocRef.get();
+    const updatedTimes = (updatedDoc.data().times || []).slice().sort();
+    await timesDocRef.update({ times: updatedTimes });
     res.json({ message: "Appointment deleted" });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete appointment" });

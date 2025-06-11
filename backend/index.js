@@ -48,6 +48,78 @@ app.post("/api/users", async (req, res) => {
     .catch(err => res.status(500).json({ error: "Failed to create user" }));
 });
 
+// Get available times for a specific date
+app.get("/api/available-times/:date", async (req, res) => {
+  try {
+    const doc = await db.collection("availableTimes").doc(req.params.date).get();
+    if (!doc.exists) {
+      return res.json({ times: [] });
+    }
+    res.json({ times: doc.data().times || [] });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch available times" });
+  }
+});
+
+// Reserve an appointment
+app.post("/api/appointments", async (req, res) => {
+  const { userId, date, time } = req.body;
+  if (!userId || !date || !time) {
+    return res.status(400).json({ error: "Missing userId, date, or time" });
+  }
+  try {
+    // Check if the time is still available
+    const timesDocRef = db.collection("availableTimes").doc(date);
+    const timesDoc = await timesDocRef.get();
+    const times = timesDoc.exists ? timesDoc.data().times : [];
+    if (!times.includes(time)) {
+      return res.status(400).json({ error: "Time not available" });
+    }
+    // Check if user already has an appointment
+    const existing = await db.collection("appointments").where("userId", "==", userId).get();
+    if (!existing.empty) {
+      return res.status(400).json({ error: "User already has an appointment" });
+    }
+    // Reserve appointment
+    await db.collection("appointments").add({ userId, date, time, createdAt: new Date() });
+    // Remove the time from availableTimes
+    await timesDocRef.update({ times: times.filter(t => t !== time) });
+    res.json({ message: "Appointment reserved" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to reserve appointment" });
+  }
+});
+
+// Get user's appointment
+app.get("/api/appointments/:userId", async (req, res) => {
+  try {
+    const snap = await db.collection("appointments").where("userId", "==", req.params.userId).get();
+    if (snap.empty) return res.json({ appointment: null });
+    const doc = snap.docs[0];
+    res.json({ appointment: { id: doc.id, ...doc.data() } });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch appointment" });
+  }
+});
+
+// Delete user's appointment
+app.delete("/api/appointments/:userId", async (req, res) => {
+  try {
+    const snap = await db.collection("appointments").where("userId", "==", req.params.userId).get();
+    if (snap.empty) return res.status(404).json({ error: "No appointment found" });
+    const doc = snap.docs[0];
+    const { date, time } = doc.data();
+    // Delete appointment
+    await db.collection("appointments").doc(doc.id).delete();
+    // Add the time back to availableTimes
+    const timesDocRef = db.collection("availableTimes").doc(date);
+    await timesDocRef.update({ times: admin.firestore.FieldValue.arrayUnion(time) });
+    res.json({ message: "Appointment deleted" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete appointment" });
+  }
+});
+
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

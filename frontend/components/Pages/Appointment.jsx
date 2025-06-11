@@ -1,11 +1,11 @@
 import Calendar from "../Appointment/Calendar.jsx";
 import Times from "../Appointment/Times.jsx";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../SideBar.jsx";
 
 function Appointment() {
     const [selectedDate, setSelectedDate] = useState(null);
-    // Mock available times for demonstration
-    const availableTimes = selectedDate ? ["17:00", "18:00", "19:00"] : [];
+    const [user] = useContext(UserContext);
 
     // Helper to create a JS Date from selected day/month/year
     const handleDaySelect = (day, month, year) => {
@@ -16,7 +16,9 @@ function Appointment() {
         <div>
             <h1 className="font-bold text-center">Appointment</h1>
             <Calendar onDaySelect={handleDaySelect} />
-            <Times date={selectedDate} availableTimes={availableTimes} />
+            {user && (
+                <Times date={selectedDate} userId={user.uid} />
+            )}
         </div>
     );
 }

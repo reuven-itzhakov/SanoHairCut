@@ -37,6 +37,17 @@ app.post("/api/profile/:uid", async (req, res) => {
   });
 });
 
+// Create user document
+app.post("/api/users", async (req, res) => {
+  const { uid, name, email } = req.body;
+  if (!uid || !name || !email) {
+    return res.status(400).json({ error: "Missing uid, name, or email" });
+  }
+  db.collection("users").doc(uid).set({ name, email })
+    .then(() => res.json({ message: "User created!" }))
+    .catch(err => res.status(500).json({ error: "Failed to create user" }));
+});
+
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

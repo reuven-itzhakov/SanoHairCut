@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from "../../firebase.js";
+import axios from 'axios';
 
 function Signup({setTab}){
 
     const [data, setData] = useState(
         {
+            name: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -15,7 +17,10 @@ function Signup({setTab}){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (data.email.trim() === '' || data.password.trim() === '' || data.confirmPassword.trim() === '') {
+        if (data.email.trim() === ''
+        || data.password.trim() === ''
+        || data.confirmPassword.trim() === ''
+        || data.name.trim() === '') {
             setData({ ...data, error: 'All fields are required' });
             return;
         }
@@ -33,6 +38,12 @@ function Signup({setTab}){
         }
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            // Create user document in Firestore via backend
+            await axios.post("http://localhost:5000/api/users", {
+                uid: userCredential.user.uid,
+                name: data.name,
+                email: data.email
+            });
             await sendEmailVerification(userCredential.user);
             setData({ email: '', password: '', confirmPassword: '', error: '' });
             // Optionally, show a message to check email for verification
@@ -53,6 +64,16 @@ function Signup({setTab}){
         <>
         <h1 className="font-bold text-center">Sign up</h1>
         <form onSubmit={handleSubmit}>
+            <label htmlFor="name">Name</label>
+            <input
+                required
+                value={data.name || ''}
+                onChange={(e) => setData({ ...data, name: e.target.value })}
+                type="text"
+                id="name"
+                placeholder="Name"
+                className="w-full p-2 my-2 rounded"
+            />
             <label for="email">Email</label>
             <input
                 required

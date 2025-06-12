@@ -55,7 +55,18 @@ app.get("/api/available-times/:date", async (req, res) => {
     if (!doc.exists) {
       return res.json({ times: [] });
     }
-    res.json({ times: doc.data().times || [] });
+    let times = doc.data().times || [];
+    // Remove past times for today (Israel time)
+    const now = new Date();
+    const israelOffset = 3 * 60; // UTC+3 in minutes (for June)
+    const todayStr = new Date(now.getTime() + (now.getTimezoneOffset() + israelOffset) * 60000).toISOString().slice(0, 10);
+    if (req.params.date === todayStr) {
+      const nowHHMM = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      times = times.filter(t => t > nowHHMM);
+      // Update DB to remove past times
+      await db.collection("availableTimes").doc(req.params.date).update({ times });
+    }
+    res.json({ times });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch available times" });
   }
@@ -137,7 +148,7 @@ app.delete("/api/appointments/:userId", async (req, res) => {
   }
 });
 
-// Admin: Add available times for a specific date
+// Admin: Set available times for a specific date (replace times)
 app.post("/api/admin/available-times", async (req, res) => {
   const { uid, date, times } = req.body;
   if (!uid || !date || !Array.isArray(times)) {
@@ -149,21 +160,11 @@ app.post("/api/admin/available-times", async (req, res) => {
     if (!userDoc.exists || userDoc.data().isAdmin !== true) {
       return res.status(403).json({ error: "Not authorized" });
     }
-    // Add or update available times for the date (merge and sort)
-    const timesDocRef = db.collection("availableTimes").doc(date);
-    const timesDoc = await timesDocRef.get();
-    let newTimes = times;
-    if (timesDoc.exists) {
-      // Merge with existing times, remove duplicates, and sort
-      const existingTimes = timesDoc.data().times || [];
-      newTimes = Array.from(new Set([...existingTimes, ...times])).sort();
-    } else {
-      newTimes = times.slice().sort();
-    }
-    await timesDocRef.set({ times: newTimes });
-    res.json({ message: "Available times updated", times: newTimes });
+    // Replace available times for the date (overwrite with new array, sorted)
+    await db.collection("availableTimes").doc(date).set({ times: times.slice().sort() });
+    res.json({ message: "Available times set", times: times.slice().sort() });
   } catch (err) {
-    res.status(500).json({ error: "Failed to update available times" });
+    res.status(500).json({ error: "Failed to set available times" });
   }
 });
 

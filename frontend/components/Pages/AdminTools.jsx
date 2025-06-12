@@ -3,6 +3,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Calendar from '../Appointment/Calendar.jsx';
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const ISRAEL_TZ = "Asia/Jerusalem";
 
 function generateTimeSlots(start = '08:00', end = '20:00', interval = 30) {
   const slots = [];
@@ -37,6 +42,18 @@ function AdminTools({ user }) {
       setIsAdmin(false);
     }
   }, [user]);
+
+  // Fetch available times for the selected date from backend
+  useEffect(() => {
+    if (!date) return;
+    axios.get(`http://localhost:5000/api/available-times/${dayjs(date).tz(ISRAEL_TZ).format('YYYY-MM-DD')}`)
+      .then(res => {
+        setSelectedTimes(res.data.times || []);
+      })
+      .catch(() => {
+        setSelectedTimes([]);
+      });
+  }, [date]);
 
   if (isAdmin === false) {
     navigate('/');
@@ -91,43 +108,45 @@ function AdminTools({ user }) {
         <Calendar onDaySelect={handleCalendarDaySelect} adminMode={true} />
         {date && <div className="mt-2 text-blue-700">Selected date: {date}</div>}
       </div>
-      <form onSubmit={handleSubmit} className="mb-2">
-        {/* Hide the manual date input, use calendar instead */}
-        <input type="hidden" value={date} readOnly />
-        <div className="mb-2">
-          <label>Times:</label>
-          <div className="flex flex-wrap gap-2 mt-2 mb-2">
-            {filteredTimes.map(time => (
-              <button
-                type="button"
-                key={time}
-                className={`px-2 py-1 rounded border ${selectedTimes.includes(time) ? 'bg-blue-600 text-white' : 'bg-white text-gray-800'} ${date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={() => {
-                  if (!(date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now)) {
-                    handleTimeClick(time);
-                  }
-                }}
-                disabled={date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now}
-              >
-                {time}
-              </button>
-            ))}
+      {date && (
+        <form onSubmit={handleSubmit} className="mb-2">
+          {/* Hide the manual date input, use calendar instead */}
+          <input type="hidden" value={date} readOnly />
+          <div className="mb-2">
+            <label>Times:</label>
+            <div className="flex flex-wrap gap-2 mt-2 mb-2">
+              {filteredTimes.map(time => (
+                <button
+                  type="button"
+                  key={time}
+                  className={`px-2 py-1 rounded border ${selectedTimes.includes(time) ? 'bg-blue-600 text-white' : 'bg-white text-gray-800'} ${date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={() => {
+                    if (!(date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now)) {
+                      handleTimeClick(time);
+                    }
+                  }}
+                  disabled={date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now}
+                >
+                  {time}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2 mb-2">
+              <button type="button" className="text-sm underline" onClick={handleSelectAll}>Select All</button>
+              <button type="button" className="text-sm underline" onClick={handleClearAll}>Clear All</button>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {selectedTimes.map(time => (
+                <span key={time} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-1 mb-1">
+                  {time}
+                  <button type="button" className="ml-1 text-red-500" onClick={() => handleTimeClick(time)}>&times;</button>
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="flex gap-2 mb-2">
-            <button type="button" className="text-sm underline" onClick={handleSelectAll}>Select All</button>
-            <button type="button" className="text-sm underline" onClick={handleClearAll}>Clear All</button>
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {selectedTimes.map(time => (
-              <span key={time} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-1 mb-1">
-                {time}
-                <button type="button" className="ml-1 text-red-500" onClick={() => handleTimeClick(time)}>&times;</button>
-              </span>
-            ))}
-          </div>
-        </div>
-        <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded" disabled={loading || !selectedTimes.length || !date}>{loading ? 'Saving...' : 'Add Times'}</button>
-      </form>
+          <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded" disabled={loading || !date}>{loading ? 'Saving...' : 'Add Times'}</button>
+        </form>
+      )}
       {result && <div className="mt-2">{result}</div>}
     </div>
   );

@@ -97,6 +97,24 @@ function Times({ date, onSelect, userId }) {
       });
   };
 
+  // Show appointment info even if no date is selected
+  if (!date && appointment) {
+    return (
+      <div className="mt-4 p-4 bg-gray-100 rounded shadow">
+        <div className="mt-4 p-4 bg-white rounded shadow text-center">
+          <div className="text-lg font-semibold text-blue-700 mb-2">Appointment</div>
+          <div className="mb-2">{dayjs(appointment.date).format('DD/MM/YYYY')} at {appointment.time}</div>
+          <button
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            Delete Appointment
+          </button>
+        </div>
+      </div>
+    );
+  }
   if (!date) return null;
   return (
     <div className="mt-4 p-4 bg-gray-100 rounded shadow">

@@ -39,34 +39,50 @@ function HomePage({ setSidebarOpen, navigate }) {
             {/* Services Section */}
             <div className="bg-white py-10">
                 <h2 className="text-xl font-bold text-center mb-6">Our Services</h2>
-                <div className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
-                    <div className="bg-gray-100 rounded-lg p-6 w-64 shadow text-center">
-                        <img src="/images/haircut.png" alt="Haircut" className="mx-auto mb-2 w-16 h-16" />
-                        <h3 className="font-semibold mb-1">Haircut</h3>
-                        <p className="text-gray-600 text-sm">Classic, modern, and custom styles for all ages.</p>
+                <div className="flex flex-wrap justify-center gap-8 max-w-8xl mx-auto">
+                    <div className="bg-gray-100 rounded-lg p-6 w-[400px] shadow text-center">
+                        <img src="/images/haircut.png" alt="Haircut" className="mx-auto mb-2 w-[400px]" />
+                        <h3 className="text-xl font-semibold mb-1">Haircut</h3>
+                        <p className="text-gray-600 text-md">Classic, modern, and custom styles for all ages.</p>
                     </div>
-                    <div className="bg-gray-100 rounded-lg p-6 w-64 shadow text-center">
-                        <img src="/images/beard.png" alt="Beard Trim" className="mx-auto mb-2 w-16 h-16" />
-                        <h3 className="font-semibold mb-1">Beard Trim</h3>
-                        <p className="text-gray-600 text-sm">Sharp lines, clean fades, and beard sculpting.</p>
+                    <div className="bg-gray-100 rounded-lg p-6 w-[400px] shadow text-center">
+                        <img src="/images/beard.png" alt="Beard Trim" className="mx-auto mb-2 w-[400px]" />
+                        <h3 className="text-xl font-semibold mb-1">Beard Trim</h3>
+                        <p className="text-gray-600 text-md">Sharp lines, clean fades, and beard sculpting.</p>
                     </div>
-                    <div className="bg-gray-100 rounded-lg p-6 w-64 shadow text-center">
-                        <img src="/images/shave.png" alt="Shave" className="mx-auto mb-2 w-16 h-16" />
-                        <h3 className="font-semibold mb-1">Shave</h3>
-                        <p className="text-gray-600 text-sm">Hot towel shaves for a smooth, fresh look.</p>
+                    <div className="bg-gray-100 rounded-lg p-6 w-[400px] shadow text-center">
+                        <img src="/images/shave.png" alt="Shave" className="mx-auto mb-2 w-[400px]" />
+                        <h3 className="text-xl font-semibold mb-1">Shave</h3>
+                        <p className="text-gray-600 text-md">Hot towel shaves for a smooth, fresh look.</p>
                     </div>
                 </div>
             </div>
 
             {/* Gallery Section */}
-            <div className="max-w-5xl mx-auto py-12 px-4">
+            <div className="max-w-8xl mx-auto py-12 px-4">
                 <h2 className="text-xl font-bold text-center mb-6">Gallery</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <img src="/images/gallery1.png" alt="Gallery 1" className="rounded shadow object-cover w-full h-40" />
-                    <img src="/images/gallery2.png" alt="Gallery 2" className="rounded shadow object-cover w-full h-40" />
-                    <img src="/images/gallery3.png" alt="Gallery 3" className="rounded shadow object-cover w-full h-40" />
-                    <img src="/images/gallery4.png" alt="Gallery 4" className="rounded shadow object-cover w-full h-40" />
+                <div className="relative overflow-hidden">
+                    <div
+                        className="flex gap-4 w-max animate-gallery-scroll"
+                        style={{ animation: 'gallery-scroll 20s linear infinite' }}
+                    >
+                        <img src="/images/gallery1.png" alt="Gallery 1" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery2.png" alt="Gallery 2" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery3.png" alt="Gallery 3" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery4.png" alt="Gallery 4" className="rounded shadow object-cover w-[300px]" />
+                        {/* Duplicate images for seamless loop */}
+                        <img src="/images/gallery1.png" alt="Gallery 1" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery2.png" alt="Gallery 2" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery3.png" alt="Gallery 3" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery4.png" alt="Gallery 4" className="rounded shadow object-cover w-[300px]" />
+                    </div>
                 </div>
+                <style>{`
+                    @keyframes gallery-scroll {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(-25%); }
+                    }
+                `}</style>
             </div>
 
             {/* Testimonials Section */}
@@ -88,7 +104,7 @@ function HomePage({ setSidebarOpen, navigate }) {
             <div className="max-w-3xl mx-auto py-12 px-4 text-center">
                 <h2 className="text-xl font-bold mb-2">Contact & Location</h2>
                 <p className="mb-2">Lotem Street, Afula</p>
-                <p className="mb-2">Phone: <a href="tel:+972501234567" className="text-blue-600 underline">054-8343-989</a></p>
+                <p className="mb-2">Phone: <a href="tel:+972548343989" className="text-blue-600 underline">+972-54-8343-989</a></p>
                 <div className="mt-4">
                     <iframe
                         title="Barbershop Location"

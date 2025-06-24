@@ -92,7 +92,7 @@ function Profile() {
 
     return (
         <div className="max-w-md mx-auto p-4">
-            <h1 className="font-bold text-center mb-4">Profile</h1>
+            <h1 className="font-bold text-2xl text-center mb-2">Profile</h1>
             {error && <div className="text-red-600 mb-2">{error}</div>}
             {success && <div className="text-green-600 mb-2">{success}</div>}
             <form onSubmit={handleProfileUpdate} className="mb-6">

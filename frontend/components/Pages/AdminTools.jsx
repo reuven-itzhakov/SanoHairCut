@@ -25,12 +25,10 @@ const now = dayjs();
 
 function AdminTools({ user }) {
   const [date, setDate] = useState('');
-  const [times, setTimes] = useState('');
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(null);
   const [selectedTimes, setSelectedTimes] = useState([]);
-  const [calendarDate, setCalendarDate] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -101,12 +99,16 @@ function AdminTools({ user }) {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="font-bold mb-2">Admin: Add Available Times</h2>
-      <div className="mb-4">
+    <div className="max-w-4xl mx-auto p-4">
+      <h2 className="font-bold text-2xl text-center mb-2">Admin: Add Available Times</h2>
+      <div className="text-center text-gray-700 mb-4">
         <label className="block mb-1">Pick a date:</label>
-        <Calendar onDaySelect={handleCalendarDaySelect} adminMode={true} />
-        {date && <div className="mt-2 text-blue-700">Selected date: {date}</div>}
+        <Calendar onDaySelect={handleCalendarDaySelect} adminMode={true} /><br />
+        {date && (
+          <div className="mt-2 text-blue-700">
+            Here you can choose the times to make appointments for this date.<br/> Select or deselect time slots below, then click "Set Times" to update the available appointments.
+          </div>
+        )}
       </div>
       {date && (
         <form onSubmit={handleSubmit} className="mb-2">
@@ -135,16 +137,8 @@ function AdminTools({ user }) {
               <button type="button" className="text-sm underline" onClick={handleSelectAll}>Select All</button>
               <button type="button" className="text-sm underline" onClick={handleClearAll}>Clear All</button>
             </div>
-            <div className="flex flex-wrap gap-1">
-              {selectedTimes.map(time => (
-                <span key={time} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-1 mb-1">
-                  {time}
-                  <button type="button" className="ml-1 text-red-500" onClick={() => handleTimeClick(time)}>&times;</button>
-                </span>
-              ))}
-            </div>
           </div>
-          <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded" disabled={loading || !date}>{loading ? 'Saving...' : 'Add Times'}</button>
+          <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded" disabled={loading || !date}>{loading ? 'Saving...' : 'Set Times'}</button>
         </form>
       )}
       {result && <div className="mt-2">{result}</div>}

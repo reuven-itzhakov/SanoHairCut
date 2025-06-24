@@ -13,8 +13,11 @@ function Appointment() {
     };
 
     return (
-        <div>
-            <h1 className="font-bold text-center">Appointment</h1>
+        <div className="max-w-4xl mx-auto p-4">
+            <h1 className="font-bold text-2xl text-center mb-2">Book an Appointment</h1>
+            <div className="text-center text-gray-700 mb-4">
+                Select a date from the calendar below, then choose an available time slot to book your appointment. If you already have an appointment, you can view or delete it here.
+            </div>
             <Calendar onDaySelect={handleDaySelect} />
             {user && (
                 <Times date={selectedDate} userId={user.uid} />

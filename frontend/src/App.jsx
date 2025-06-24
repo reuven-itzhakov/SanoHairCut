@@ -1,7 +1,6 @@
 import Header from '../components/Header.jsx'
 import HomePage from '../components/Pages/HomePage.jsx'
 import Appointment from '../components/Pages/Appointment.jsx'
-import Settings from '../components/Pages/Settings.jsx'
 import Profile from '../components/Pages/Profile.jsx'
 import AdminTools from '../components/Pages/AdminTools.jsx';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
@@ -26,7 +25,6 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage setSidebarOpen={setSidebarOpen} navigate={navigate} />} />
         <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" />} />
-        <Route path="/settings" element={user ? <Settings /> : <Navigate to="/" />} />
         <Route path="/profile" element={user ? <Profile /> : <Navigate to="/" />} />
         <Route path="/admin" element={user ? <AdminTools user={user} /> : <Navigate to="/" />} />
       </Routes>

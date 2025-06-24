@@ -35,9 +35,8 @@ function User(){
         <>
         <Tab icon="https://www.svgrepo.com/show/390671/profile-user-avatar-man-person.svg" title="Profile" click={() => navigate('/profile')}/>
         <Tab icon="https://www.svgrepo.com/show/533396/calendar-lines-pen.svg" title="Appointment" click={() => navigate('/appointment')}/>
-        <Tab icon="https://www.svgrepo.com/show/511123/settings-future.svg" title="Settings" click={() => navigate('/settings')}/>
         {isAdmin && (
-                <Tab icon="https://www.svgrepo.com/show/533396/calendar-lines-pen.svg" title="Admin Tools" click={() => navigate('/admin')} />
+                <Tab icon="https://www.svgrepo.com/show/511123/settings-future.svg" title="Admin Tools" click={() => navigate('/admin')} />
             )}
         <Tab icon="https://www.svgrepo.com/show/506720/logout.svg" title="Sign out" click={() => signOutUser()}/>
         </>

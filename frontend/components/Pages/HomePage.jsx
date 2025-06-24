@@ -64,7 +64,7 @@ function HomePage({ setSidebarOpen, navigate }) {
                 <div className="relative overflow-hidden">
                     <div
                         className="flex gap-4 w-max animate-gallery-scroll"
-                        style={{ animation: 'gallery-scroll 20s linear infinite' }}
+                        style={{ animation: 'gallery-scroll 30s linear infinite' }}
                     >
                         <img src="/images/gallery1.png" alt="Gallery 1" className="rounded shadow object-cover w-[300px]" />
                         <img src="/images/gallery2.png" alt="Gallery 2" className="rounded shadow object-cover w-[300px]" />
@@ -80,7 +80,7 @@ function HomePage({ setSidebarOpen, navigate }) {
                 <style>{`
                     @keyframes gallery-scroll {
                         0% { transform: translateX(0); }
-                        100% { transform: translateX(-25%); }
+                        100% { transform: translateX(-30%); }
                     }
                 `}</style>
             </div>

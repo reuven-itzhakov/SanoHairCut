@@ -7,14 +7,9 @@ function HomePage({ setSidebarOpen, navigate }) {
     const handleBookClick = (e) => {
         e.preventDefault();
         if (user) {
-            // If using react-router, use navigate
-            if (navigate) {
-                navigate("/appointment");
-            } else {
-                window.location.href = "/appointment";
-            }
+            navigate("/appointment");
         } else {
-            setSidebarOpen && setSidebarOpen(true);
+            setSidebarOpen(true);
         }
     };
 

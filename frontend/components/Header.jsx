@@ -1,9 +1,7 @@
 import SideBar from "./SideBar.jsx"
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Header() {
-    const [isOpen, setIsOpen] = useState(false);
+function Header({ isOpen, setIsOpen }) {
     const navigate = useNavigate();
     return (
         <>

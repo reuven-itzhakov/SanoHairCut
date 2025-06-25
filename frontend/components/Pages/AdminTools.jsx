@@ -102,6 +102,9 @@ function AdminTools({ user }) {
     <div className="max-w-4xl mx-auto p-4">
       <h2 className="font-bold text-2xl text-center mb-2">Admin: Add Available Times</h2>
       <div className="text-center text-gray-700 mb-4">
+        <div className="mb-2">
+          Select a date from the calendar below, then choose the available time slots for appointments. You can select or deselect multiple slots for the chosen day. When finished, click "Set Times" to update the available appointments for that date.
+        </div>
         <label className="block mb-1">Pick a date:</label>
         <Calendar onDaySelect={handleCalendarDaySelect} adminMode={true} /><br />
         {date && (

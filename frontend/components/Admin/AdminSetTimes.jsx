@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import Calendar from './Appointment/Calendar.jsx';
+import Calendar from '../Appointment/Calendar.jsx';
 const ISRAEL_TZ = "Asia/Jerusalem";
 
 function generateTimeSlots(start = '08:00', end = '20:00', interval = 30) {
@@ -98,26 +98,22 @@ function AdminSetTimes({ user, axios, onResult }) {
                   type="button"
                   key={time}
                   className={`px-2 py-1 rounded border ${selectedTimes.includes(time) ? 'bg-blue-600 text-white' : 'bg-white text-gray-800'} ${date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  onClick={() => {
-                    if (!(date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now)) {
-                      handleTimeClick(time);
-                    }
-                  }}
+                  onClick={() => handleTimeClick(time)}
                   disabled={date === dayjs().format('YYYY-MM-DD') && dayjs(`${date}T${time}`) <= now}
                 >
                   {time}
                 </button>
               ))}
             </div>
-            <div className="flex gap-2 mb-2">
-              <button type="button" className="text-sm underline" onClick={handleSelectAll}>Select All</button>
-              <button type="button" className="text-sm underline" onClick={handleClearAll}>Clear All</button>
+            <div className="flex gap-2 mt-2">
+              <button type="button" className="px-3 py-1 bg-gray-200 rounded" onClick={handleSelectAll}>Select All</button>
+              <button type="button" className="px-3 py-1 bg-gray-200 rounded" onClick={handleClearAll}>Clear All</button>
             </div>
           </div>
-          <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded" disabled={loading || !date}>{loading ? 'Saving...' : 'Set Times'}</button>
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded" disabled={loading}>{loading ? 'Saving...' : 'Set Times'}</button>
+          {result && <div className="mt-2 text-green-700">{result}</div>}
         </form>
       )}
-      {result && <div className="mt-2">{result}</div>}
     </div>
   );
 }

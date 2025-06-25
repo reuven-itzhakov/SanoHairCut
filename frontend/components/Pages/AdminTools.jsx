@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import AdminToolsTabs from '../AdminToolsTabs.jsx';
-import AdminSetTimes from '../AdminSetTimes.jsx';
-import AdminReservedTable from '../AdminReservedTable.jsx';
+import AdminToolsTabs from '../Admin/AdminToolsTabs.jsx';
+import AdminSetTimes from '../Admin/AdminSetTimes.jsx';
+import AdminReservedTable from '../Admin/AdminReservedTable.jsx';
 
 function AdminTools({ user }) {
   const [isAdmin, setIsAdmin] = useState(null);

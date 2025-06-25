@@ -107,5 +107,42 @@ module.exports = (db, admin) => {
     }
   });
 
+  // Change appointment date (admin)
+  router.post("/appointments/:userId/change-date", async (req, res) => {
+    const { date, time } = req.body;
+    const { userId } = req.params;
+    if (!date || !time) {
+      return res.status(400).json({ error: "Missing date or time" });
+    }
+    try {
+      // Find the appointment
+      const snap = await db.collection("appointments").where("userId", "==", userId).get();
+      if (snap.empty) return res.status(404).json({ error: "Appointment not found" });
+      const doc = snap.docs[0];
+      const oldData = doc.data();
+      // Remove time from old date's availableTimes
+      const oldTimesRef = db.collection("availableTimes").doc(oldData.date);
+      const oldTimesDoc = await oldTimesRef.get();
+      if (oldTimesDoc.exists) {
+        await oldTimesRef.update({
+          times: (oldTimesDoc.data().times || []).concat(oldData.time).sort()
+        });
+      } else {
+        await oldTimesRef.set({ times: [oldData.time] });
+      }
+      // Remove time from new date's availableTimes
+      const newTimesRef = db.collection("availableTimes").doc(date);
+      const newTimesDoc = await newTimesRef.get();
+      let newTimes = newTimesDoc.exists ? newTimesDoc.data().times : [];
+      newTimes = newTimes.filter(t => t !== time);
+      await newTimesRef.set({ times: newTimes });
+      // Update appointment
+      await db.collection("appointments").doc(doc.id).update({ date, time });
+      res.json({ message: "Appointment date updated" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to update appointment date" });
+    }
+  });
+
   return router;
 };

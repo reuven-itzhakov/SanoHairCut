@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminToolsTabs from '../Admin/AdminToolsTabs.jsx';
 import AdminSetTimes from '../Admin/AdminSetTimes.jsx';
 import AdminReservedTable from '../Admin/AdminReservedTable.jsx';
+import AdminUsersTable from '../Admin/AdminUsersTable.jsx';
 
 function AdminTools({ user }) {
   const [isAdmin, setIsAdmin] = useState(null);
@@ -39,6 +40,12 @@ function AdminTools({ user }) {
         <div className="bg-white rounded shadow p-4 mt-4">
           <h3 className="font-bold text-lg mb-2">Reserved Appointments</h3>
           <AdminReservedTable axios={axios} />
+        </div>
+      )}
+      {activeTab === 'users' && (
+        <div className="bg-white rounded shadow p-4 mt-4">
+          <h3 className="font-bold text-lg mb-2">All Users</h3>
+          <AdminUsersTable axios={axios} />
         </div>
       )}
     </div>

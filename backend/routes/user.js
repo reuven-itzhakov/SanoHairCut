@@ -37,5 +37,44 @@ module.exports = (db, admin) => {
     }
   });
 
+  // Get all users (for admin)
+  router.get("/users", async (req, res) => {
+    try {
+      let users = [];
+      let nextPageToken;
+      do {
+        const result = await admin.auth().listUsers(1000, nextPageToken);
+        users = users.concat(result.users.map(userRecord => ({
+          uid: userRecord.uid,
+          displayName: userRecord.displayName || null,
+          email: userRecord.email || null,
+          isAdmin: userRecord.customClaims && userRecord.customClaims.isAdmin === true
+        })));
+        nextPageToken = result.pageToken;
+      } while (nextPageToken);
+      res.json({ users });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to fetch users" });
+    }
+  });
+
+  // Update user info and admin status (for admin)
+  router.post("/users/:uid/update", async (req, res) => {
+    const { name, email, isAdmin } = req.body;
+    const { uid } = req.params;
+    try {
+      // Update displayName and email
+      await admin.auth().updateUser(uid, {
+        displayName: name,
+        email: email
+      });
+      // Update admin claim
+      await admin.auth().setCustomUserClaims(uid, { isAdmin: !!isAdmin });
+      res.json({ message: "User updated" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to update user" });
+    }
+  });
+
   return router;
 };

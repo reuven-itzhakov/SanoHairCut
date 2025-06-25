@@ -4,40 +4,37 @@ module.exports = (db, admin) => {
   const router = express.Router();
 
   // --- User Management ---
-  // Create user document
-  router.post("/users", async (req, res) => {
-    const { uid, name, email } = req.body;
-    if (!uid || !name || !email) {
-      return res.status(400).json({ error: "Missing uid, name, or email" });
-    }
-    db.collection("users").doc(uid).set({ name, email })
-      .then(() => res.json({ message: "User created!" }))
-      .catch(err => res.status(500).json({ error: "Failed to create user" }));
-  });
+  // Create user (handled by Firebase Auth, not here)
+  // Optionally, you can create users via admin.auth().createUser if needed
 
   // --- User Profile ---
-  // Get user profile
+  // Get user profile from Firebase Auth
   router.get("/profile/:uid", async (req, res) => {
-    db.collection("users").doc(req.params.uid).get()
-      .then(docSnap => {
-        if (!docSnap.exists)
-          return res.status(404).json({ error: "User not found" });
-        res.json(docSnap.data());
-      }).catch(err => {
-        res.status(500).json({ error: "Failed to fetch profile" });
+    try {
+      const userRecord = await admin.auth().getUser(req.params.uid);
+      res.json({
+        uid: userRecord.uid,
+        name: userRecord.displayName || null,
+        email: userRecord.email || null,
+        isAdmin: userRecord.customClaims && userRecord.customClaims.isAdmin === true
       });
+    } catch (err) {
+      res.status(404).json({ error: "User not found" });
+    }
   });
 
-  // Update user profile (first name)
+  // Update user profile (displayName in Firebase Auth)
   router.post("/profile/:uid", async (req, res) => {
-    db.collection("users").doc(req.params.uid).set(
-      { name: req.body.name },
-      { merge: true }
-    ).then(() => {
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ error: "Missing name" });
+    }
+    try {
+      await admin.auth().updateUser(req.params.uid, { displayName: name });
       res.json({ message: "Profile updated!" });
-    }).catch(err => {
+    } catch (err) {
       res.status(500).json({ error: "Failed to update profile" });
-    });
+    }
   });
 
   return router;

@@ -54,7 +54,6 @@ function Signup({setTab}){
                     setData({ ...data, error: 'Email already in use' });
                     break;
                 default:
-                    console.log("Error signing in:", error.code, error.message);
                     setData({ ...data, error: error.message || 'Signin failed' });
             }
         }

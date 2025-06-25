@@ -32,16 +32,14 @@ function AdminReservedTable({ axios }) {
             <th className="px-4 py-2 border">Customer</th>
             <th className="px-4 py-2 border">Date</th>
             <th className="px-4 py-2 border">Time</th>
-            <th className="px-4 py-2 border">Service</th>
           </tr>
         </thead>
         <tbody>
           {appointments.map((appt, idx) => (
             <tr key={idx} className="even:bg-gray-50">
-              <td className="px-4 py-2 border">{appt.customerName || appt.userId || '-'}</td>
+              <td className="px-4 py-2 border">{appt.customerName || appt.customerEmail || appt.userId || '-'}</td>
               <td className="px-4 py-2 border">{appt.date}</td>
               <td className="px-4 py-2 border">{appt.time}</td>
-              <td className="px-4 py-2 border">{appt.service || '-'}</td>
             </tr>
           ))}
         </tbody>

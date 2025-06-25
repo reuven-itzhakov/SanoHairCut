@@ -34,9 +34,9 @@ module.exports = (db, admin) => {
       return res.status(400).json({ error: "Missing uid, date, or times" });
     }
     try {
-      // Check if user is admin
-      const userDoc = await db.collection("users").doc(uid).get();
-      if (!userDoc.exists || userDoc.data().isAdmin !== true) {
+      // Check if user is admin using Firebase Auth custom claims
+      const userRecord = await admin.auth().getUser(uid);
+      if (!userRecord.customClaims || userRecord.customClaims.isAdmin !== true) {
         return res.status(403).json({ error: "Not authorized" });
       }
       // Replace available times for the date (overwrite with new array, sorted)

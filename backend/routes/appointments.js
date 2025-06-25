@@ -84,5 +84,28 @@ module.exports = (db, admin) => {
     }
   });
 
+  // Get all appointments (for admin)
+  router.get("/appointments", async (req, res) => {
+    try {
+      const snap = await db.collection("appointments").get();
+      const appointments = await Promise.all(snap.docs.map(async doc => {
+        const data = doc.data();
+        let customerName = null;
+        let customerEmail = null;
+        try {
+          const userRecord = await admin.auth().getUser(data.userId);
+          customerName = userRecord.displayName || null;
+          customerEmail = userRecord.email || null;
+        } catch (e) {
+          // User not found or error, leave as null
+        }
+        return { id: doc.id, ...data, customerName, customerEmail };
+      }));
+      res.json({ appointments });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to fetch appointments" });
+    }
+  });
+
   return router;
 };

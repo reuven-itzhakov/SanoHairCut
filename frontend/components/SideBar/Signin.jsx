@@ -21,7 +21,6 @@ function Signin({setTab}){
         }
         try {
             const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
-            console.log("User signed in:", userCredential);
             setData({ email: '', password: '', error: '' });
         } catch (error) {
             switch (error.code) {
@@ -29,7 +28,6 @@ function Signin({setTab}){
                     setData({ ...data, error: 'Incorrect password' });
                     break;
                 default:
-                    console.log("Error signing in:", error.code, error.message);
                     setData({ ...data, error: error.message || 'Signin failed' });
             }
         }

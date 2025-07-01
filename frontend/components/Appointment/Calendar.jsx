@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate();
@@ -10,6 +11,7 @@ function getFirstDayOfWeek(year, month) {
 }
 
 function Calendar({ onDaySelect, adminMode = false }) {
+  const { t, i18n } = useTranslation();
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
@@ -19,7 +21,9 @@ function Calendar({ onDaySelect, adminMode = false }) {
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDayOfWeek = getFirstDayOfWeek(currentYear, currentMonth);
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const daysOfWeek = i18n.language === 'he'
+    ? [t('calendar.days.su'), t('calendar.days.mo'), t('calendar.days.tu'), t('calendar.days.we'), t('calendar.days.th'), t('calendar.days.fr'), t('calendar.days.sa')]
+    : [t('calendar.days.su'), t('calendar.days.mo'), t('calendar.days.tu'), t('calendar.days.we'), t('calendar.days.th'), t('calendar.days.fr'), t('calendar.days.sa')];
 
   // Fetch which days in the current month have available times
   useEffect(() => {
@@ -96,19 +100,19 @@ function Calendar({ onDaySelect, adminMode = false }) {
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded shadow">
-      <div className="flex justify-between items-center mb-2">
+      <div dir="ltr" className="flex justify-between items-center mb-2">
         <button onClick={prevMonth} className="px-2 py-1 bg-gray-200 rounded select-none" style={{ userSelect: 'none' }}>&#8592;</button>
         <h2 className="text-xl font-bold select-none" style={{ userSelect: 'none' }}>
-          {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}
+          {new Date(currentYear, currentMonth).toLocaleString(i18n.language === 'he' ? 'he' : 'en', { month: 'long', year: 'numeric' })}
         </h2>
         <button onClick={nextMonth} className="px-2 py-1 bg-gray-200 rounded select-none" style={{ userSelect: 'none' }}>&#8594;</button>
       </div>
       <div className="grid grid-cols-7 gap-1 text-center">
-        {daysOfWeek.map((d) => (
-          <div key={d} className="font-semibold text-gray-700 select-none" style={{ userSelect: 'none' }}>{d}</div>
+        {daysOfWeek.map((d, i) => (
+          <div key={i} className="font-semibold text-gray-700 select-none" style={{ userSelect: 'none' }}>{d}</div>
         ))}
         {loadingDays ? (
-          <div className="col-span-7 text-center py-8 text-gray-500">Loading available dates...</div>
+          <div className="col-span-7 text-center py-8 text-gray-500">{t('calendar.loading')}</div>
         ) : (
           calendarDays.map((day, idx) => {
             const isEmpty = day === null;
@@ -139,7 +143,7 @@ function Calendar({ onDaySelect, adminMode = false }) {
       </div>
       {selectedDay && (
         <div className="mt-4 text-center text-lg font-semibold text-blue-700">
-          Selected: {selectedDay}/{currentMonth + 1}/{currentYear}
+          {t('calendar.selected')}: {selectedDay}/{currentMonth + 1}/{currentYear}
         </div>
       )}
     </div>

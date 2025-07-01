@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from "../../firebase.js";
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 function Signup({setTab}){
+    const { t } = useTranslation();
 
     const [data, setData] = useState(
         {
@@ -21,19 +23,19 @@ function Signup({setTab}){
         || data.password.trim() === ''
         || data.confirmPassword.trim() === ''
         || data.name.trim() === '') {
-            setData({ ...data, error: 'All fields are required' });
+            setData({ ...data, error: t('signup.error.required') });
             return;
         }
         else if (!data.email.includes('@')) {
-            setData({ ...data, error: 'Invalid email address' });
+            setData({ ...data, error: t('signup.error.invalidEmail') });
             return;
         }
         else if (data.password.length < 6) {
-            setData({ ...data, error: 'Password must be at least 6 characters long' });
+            setData({ ...data, error: t('signup.error.passwordLength') });
             return;
         }
         else if (data.password !== data.confirmPassword) {
-            setData({ ...data, error: 'Passwords do not match' });
+            setData({ ...data, error: t('signup.error.passwordsNoMatch') });
             return;
         }
         try {
@@ -51,63 +53,63 @@ function Signup({setTab}){
         catch (error) {
             switch (error.code) {
                 case 'auth/email-already-in-use':
-                    setData({ ...data, error: 'Email already in use' });
+                    setData({ ...data, error: t('signup.error.emailInUse') });
                     break;
                 default:
-                    setData({ ...data, error: error.message || 'Signin failed' });
+                    setData({ ...data, error: error.message || t('signup.error.failed') });
             }
         }
     }
 
     return (
         <>
-        <h1 className="font-bold text-center">Sign up</h1>
+        <h1 className="font-bold text-center">{t('signup.title')}</h1>
         <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{t('signup.name')}</label>
             <input
                 required
                 value={data.name || ''}
                 onChange={(e) => setData({ ...data, name: e.target.value })}
                 type="text"
                 id="name"
-                placeholder="Name"
+                placeholder={t('signup.namePlaceholder')}
                 className="w-full p-2 my-2 rounded"
             />
-            <label for="email">Email</label>
+            <label htmlFor="email">{t('signup.email')}</label>
             <input
                 required
                 value={data.email || ''}
                 onChange={(e) => setData({ ...data, email: e.target.value })}
                 type="email"
                 id="email"
-                placeholder="Email"
+                placeholder={t('signup.emailPlaceholder')}
                 className="w-full p-2 my-2 rounded"
             />
-            <label for="password">Password</label>
+            <label htmlFor="password">{t('signup.password')}</label>
             <input
                 required
                 value={data.password || ''}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
                 type="password"
                 id="password"
-                placeholder="Password"
+                placeholder={t('signup.passwordPlaceholder')}
                 className="w-full p-2 my-2 rounded"
             />
-            <label for="confirm-password">Confirm Password</label>
+            <label htmlFor="confirm-password">{t('signup.confirmPassword')}</label>
             <input
                 required
                 value={data.confirmPassword || ''}
                 onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
                 type="password"
                 id="confirm-password"
-                placeholder="Confirm Password"
+                placeholder={t('signup.confirmPasswordPlaceholder')}
                 className="w-full p-2 my-2 rounded"
             />
-            <a onClick={() => setTab('signin')} className="cursor-pointer text-blue-600 hover:underline">Already have an account?</a>
+            <a onClick={() => setTab('signin')} className="cursor-pointer text-blue-600 hover:underline">{t('signup.alreadyHaveAccount')}</a>
             <input
                 type="submit"
                 className="w-full bg-blue-600 text-white p-2 rounded mt-4 hover:bg-blue-700"
-                value="Sign Up"
+                value={t('signup.signUpButton')}
             />
             {data.error && <p className="text-red-600 mt-2">{data.error}</p>}
         </form>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import Calendar from '../Appointment/Calendar.jsx';
+import { useTranslation } from 'react-i18next';
+
 const ISRAEL_TZ = "Asia/Jerusalem";
 
 function generateTimeSlots(start = '08:00', end = '20:00', interval = 30) {
@@ -18,6 +20,7 @@ const ALL_TIMES = generateTimeSlots();
 const now = dayjs();
 
 function AdminSetTimes({ user, axios, onResult }) {
+  const { t } = useTranslation();
   const [date, setDate] = useState('');
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -77,13 +80,13 @@ function AdminSetTimes({ user, axios, onResult }) {
     <div>
       <div className="text-center text-gray-700 mb-4">
         <div className="mb-2">
-          Select a date from the calendar below, then choose the available time slots for appointments. You can select or deselect multiple slots for the chosen day. When finished, click "Set Times" to update the available appointments for that date.
+          {t('adminSetTimes.instructions')}
         </div>
-        <label className="block mb-1">Pick a date:</label>
+        <label className="block mb-1">{t('adminSetTimes.pickDate')}</label>
         <Calendar onDaySelect={handleCalendarDaySelect} adminMode={true} /><br />
         {date && (
           <div className="mt-2 text-blue-700">
-            Here you can choose the times to make appointments for this date.<br/> Select or deselect time slots below, then click "Set Times" to update the available appointments.
+            {t('adminSetTimes.chooseTimes')}
           </div>
         )}
       </div>
@@ -91,7 +94,7 @@ function AdminSetTimes({ user, axios, onResult }) {
         <form onSubmit={handleSubmit} className="mb-2">
           <input type="hidden" value={date} readOnly />
           <div className="mb-2">
-            <label>Times:</label>
+            <label>{t('adminSetTimes.times')}</label>
             <div className="flex flex-wrap gap-2 mt-2 mb-2">
               {filteredTimes.map(time => (
                 <button
@@ -106,11 +109,11 @@ function AdminSetTimes({ user, axios, onResult }) {
               ))}
             </div>
             <div className="flex gap-2 mt-2">
-              <button type="button" className="px-3 py-1 bg-gray-200 rounded" onClick={handleSelectAll}>Select All</button>
-              <button type="button" className="px-3 py-1 bg-gray-200 rounded" onClick={handleClearAll}>Clear All</button>
+              <button type="button" className="px-3 py-1 bg-gray-200 rounded" onClick={handleSelectAll}>{t('adminSetTimes.selectAll')}</button>
+              <button type="button" className="px-3 py-1 bg-gray-200 rounded" onClick={handleClearAll}>{t('adminSetTimes.clearAll')}</button>
             </div>
           </div>
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded" disabled={loading}>{loading ? 'Saving...' : 'Set Times'}</button>
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded" disabled={loading}>{loading ? t('adminSetTimes.saving') : t('adminSetTimes.setTimes')}</button>
           {result && <div className="mt-2 text-green-700">{result}</div>}
         </form>
       )}

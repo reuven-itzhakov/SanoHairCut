@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.js";
+import { useTranslation } from 'react-i18next';
+
 function Signin({setTab}){
+    const { t } = useTranslation();
 
     const [data, setData] = useState({
         email: '',
@@ -12,11 +15,11 @@ function Signin({setTab}){
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (data.email.trim() === '' || data.password.trim() === '') {
-            setData({ ...data, error: 'Email and password are required' });
+            setData({ ...data, error: t('signin.error.required') });
             return;
         }
         else if (!data.email.includes('@')) {
-            setData({ ...data, error: 'Invalid email address' });
+            setData({ ...data, error: t('signin.error.invalidEmail') });
             return;
         }
         try {
@@ -25,45 +28,45 @@ function Signin({setTab}){
         } catch (error) {
             switch (error.code) {
                 case 'auth/invalid-credential':
-                    setData({ ...data, error: 'Incorrect password' });
+                    setData({ ...data, error: t('signin.error.incorrectPassword') });
                     break;
                 default:
-                    setData({ ...data, error: error.message || 'Signin failed' });
+                    setData({ ...data, error: error.message || t('signin.error.failed') });
             }
         }
     }
 
     return (
         <>
-            <h1 className="font-bold text-center">Sign in</h1>
+            <h1 className="font-bold text-center">{t('signin.title')}</h1>
             <form onSubmit={handleSubmit}>
-                <label for="email">Email</label>
+                <label htmlFor="email">{t('signin.email')}</label>
                 <input
                     required
                     value={data.email || ''}
                     onChange={(e) => setData({ ...data, email: e.target.value })}
                     type="email" 
                     id="email" 
-                    placeholder="Email" 
+                    placeholder={t('signin.emailPlaceholder')} 
                     className="w-full p-2 my-2 rounded"
                 />
-                <label for="password">Password</label>
+                <label htmlFor="password">{t('signin.password')}</label>
                 <input
                     required
                     value={data.password || ''}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
                     type="password"
                     id="password"
-                    placeholder="Password"
+                    placeholder={t('signin.passwordPlaceholder')}
                     className="w-full p-2 my-2 rounded"
                 />
-                <a onClick={() => setTab('signup')} className="cursor-pointer text-blue-600 hover:underline">Create an account</a>
+                <a onClick={() => setTab('signup')} className="cursor-pointer text-blue-600 hover:underline">{t('signin.createAccount')}</a>
                 <br/>
-                <a onClick={() => setTab('reset-password')} className="cursor-pointer text-blue-600 hover:underline">Forgot password?</a>
+                <a onClick={() => setTab('reset-password')} className="cursor-pointer text-blue-600 hover:underline">{t('signin.forgotPassword')}</a>
                 <input
                     type="submit"
                     className="w-full bg-blue-600 text-white p-2 rounded mt-4 hover:bg-blue-700"
-                    value="Sign In"
+                    value={t('signin.signInButton')}
                 />
                 {data.error && <p className="text-red-600 mt-2">{data.error}</p>}
             </form>

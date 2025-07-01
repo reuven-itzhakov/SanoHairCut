@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 function AdminUsersTable({ axios }) {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -57,23 +59,23 @@ function AdminUsersTable({ axios }) {
     }
   };
 
-  if (loading) return <div>Loading users...</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
-  if (!users.length) return <div>No users found.</div>;
+  if (loading) return <div>{t('adminUsersTable.loading')}</div>;
+  if (error) return <div className="text-red-600">{t('adminUsersTable.error')}</div>;
+  if (!users.length) return <div>{t('adminUsersTable.noUsers')}</div>;
 
   return (
     <div className="overflow-x-auto">
       <div className="mb-3 text-gray-700 text-sm">
-        This table shows all users registered in the system, including their UID, name, email, and admin status. You can edit user info and admin rights.
+        {t('adminUsersTable.instructions')}
       </div>
-      <table className="min-w-full border border-gray-300">
+      <table dir="ltr" className="min-w-full border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
             <th className="px-4 py-2 border">UID</th>
-            <th className="px-4 py-2 border">Name</th>
-            <th className="px-4 py-2 border">Email</th>
-            <th className="px-4 py-2 border">Admin</th>
-            <th className="px-4 py-2 border">Actions</th>
+            <th className="px-4 py-2 border">{t('adminUsersTable.name')}</th>
+            <th className="px-4 py-2 border">{t('adminUsersTable.email')}</th>
+            <th className="px-4 py-2 border">{t('adminUsersTable.admin')}</th>
+            <th className="px-4 py-2 border">{t('adminUsersTable.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -115,17 +117,17 @@ function AdminUsersTable({ axios }) {
                     onChange={handleEditChange}
                   />
                 ) : (
-                  user.isAdmin ? 'Yes' : 'No'
+                  user.isAdmin ? t('adminUsersTable.yes') : t('adminUsersTable.no')
                 )}
               </td>
               <td className="px-4 py-2 border text-center">
                 {editingIdx === idx ? (
                   <>
-                    <button onClick={() => handleEditSave(user)} className="text-green-600 hover:underline mr-2">Save</button>
-                    <button onClick={() => setEditingIdx(null)} className="text-gray-600 hover:underline">Cancel</button>
+                    <button onClick={() => handleEditSave(user)} className="text-green-600 hover:underline mr-2">{t('adminUsersTable.save')}</button>
+                    <button onClick={() => setEditingIdx(null)} className="text-gray-600 hover:underline">{t('adminUsersTable.cancel')}</button>
                   </>
                 ) : (
-                  <button onClick={() => handleEdit(idx, user)} className="text-blue-600 hover:underline">Edit</button>
+                  <button onClick={() => handleEdit(idx, user)} className="text-blue-600 hover:underline">{t('adminUsersTable.edit')}</button>
                 )}
               </td>
             </tr>

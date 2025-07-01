@@ -3,8 +3,10 @@ import { UserContext } from "../SideBar.jsx";
 import { updateEmail, sendEmailVerification, signOut, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth } from "../../firebase"; // Import auth from your firebase configuration
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 function Profile() {
+    const { t } = useTranslation();
     const [user] = useContext(UserContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState(user ? user.email : "");
@@ -21,7 +23,7 @@ function Profile() {
                 .then(res => {
                     setName(res.data.name || "");
                 })
-                .catch(() => setError("Failed to load profile"));
+                .catch(() => setError(t('profile.error.load')));
         }
     }, [user]);
 
@@ -30,15 +32,15 @@ function Profile() {
         setSuccess("");
         setError("");
         if (!name.trim()) {
-            setError("Name cannot be empty.");
+            setError(t('profile.error.nameRequired'));
             return;
         }
         if (!email.trim()) {
-            setError("Email cannot be empty.");
+            setError(t('profile.error.emailRequired'));
             return;
         }
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-            setError("Invalid email format.");
+            setError(t('profile.error.emailInvalid'));
             return;
         }
         try {
@@ -47,21 +49,21 @@ function Profile() {
             // Update email in Firebase Auth if changed
             if (user && email !== user.email) {
                 if (!user.emailVerified) {
-                    setError("Please verify your current email before changing it.");
+                    setError(t('profile.error.verifyCurrentEmail'));
                     return;
                 }
                 await updateEmail(user, email);
                 await sendEmailVerification(user);
-                setSuccess("Profile updated! Please check your new email to verify it. You will be signed out.");
+                setSuccess(t('profile.success.emailChanged'));
                 setTimeout(() => {
                     signOut(auth);
                 }, 5000); // Sign out after 5 seconds
                 return;
             } else {
-                setSuccess("Profile updated!");
+                setSuccess(t('profile.success.updated'));
             }
         } catch (err) {
-            setError("Failed to update profile. " + (err.message || ""));
+            setError(t('profile.error.update') + (err.message ? ' ' + err.message : ''));
         }
     };
 
@@ -70,57 +72,57 @@ function Profile() {
         setSuccess("");
         setError("");
         if (!oldPassword || !newPassword || !repeatPassword) {
-            setError("All password fields are required.");
+            setError(t('profile.error.passwordRequired'));
             return;
         }
         if (newPassword !== repeatPassword) {
-            setError("New passwords do not match.");
+            setError(t('profile.error.passwordsNoMatch'));
             return;
         }
         try {
             const credential = EmailAuthProvider.credential(user.email, oldPassword);
             await reauthenticateWithCredential(user, credential);
             await updatePassword(user, newPassword);
-            setSuccess("Password updated!");
+            setSuccess(t('profile.success.passwordChanged'));
             setOldPassword("");
             setNewPassword("");
             setRepeatPassword("");
         } catch (err) {
-            setError("Failed to update password. " + (err.message || ""));
+            setError(t('profile.error.passwordUpdate') + (err.message ? ' ' + err.message : ''));
         }
     };
 
     return (
         <div className="max-w-md mx-auto p-4">
-            <h1 className="font-bold text-2xl text-center mb-2">Profile</h1>
+            <h1 className="font-bold text-2xl text-center mb-2">{t('profile.title')}</h1>
             {error && <div className="text-red-600 mb-2">{error}</div>}
             {success && <div className="text-green-600 mb-2">{success}</div>}
             <form onSubmit={handleProfileUpdate} className="mb-6">
                 <div className="mb-2">
-                    <label className="block">Name</label>
+                    <label className="block">{t('profile.name')}</label>
                     <input required className="w-full p-2 border rounded" value={name} onChange={e => setName(e.target.value)} />
                 </div>
                 <div className="mb-2">
-                    <label className="block">Email</label>
+                    <label className="block">{t('profile.email')}</label>
                     <input required type="email" className="w-full p-2 border rounded" value={email} onChange={e => setEmail(e.target.value)} />
                 </div>
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded mt-2">Update Profile</button>
+                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded mt-2">{t('profile.updateProfile')}</button>
             </form>
             <form onSubmit={handlePasswordUpdate} className="mb-6">
-                <h2 className="font-semibold mb-2">Change Password</h2>
+                <h2 className="font-semibold mb-2">{t('profile.changePassword')}</h2>
                 <div className="mb-2">
-                    <label className="block">Old Password</label>
+                    <label className="block">{t('profile.oldPassword')}</label>
                     <input required type="password" className="w-full p-2 border rounded" value={oldPassword} onChange={e => setOldPassword(e.target.value)} />
                 </div>
                 <div className="mb-2">
-                    <label className="block">New Password</label>
+                    <label className="block">{t('profile.newPassword')}</label>
                     <input required type="password" className="w-full p-2 border rounded" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
                 </div>
                 <div className="mb-2">
-                    <label className="block">Repeat New Password</label>
+                    <label className="block">{t('profile.repeatNewPassword')}</label>
                     <input required type="password" className="w-full p-2 border rounded" value={repeatPassword} onChange={e => setRepeatPassword(e.target.value)} />
                 </div>
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded mt-2">Update Password</button>
+                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded mt-2">{t('profile.updatePassword')}</button>
             </form>
         </div>
     );

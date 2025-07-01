@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 function AdminReservedTable({ axios }) {
+  const { t } = useTranslation();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -91,24 +93,24 @@ function AdminReservedTable({ axios }) {
     return 0;
   });
 
-  if (loading) return <div>Loading reserved appointments...</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
-  if (!appointments.length) return <div>No reserved appointments found.</div>;
+  if (loading) return <div>{t('adminReservedTable.loading')}</div>;
+  if (error) return <div className="text-red-600">{t('adminReservedTable.error')}</div>;
+  if (!appointments.length) return <div>{t('adminReservedTable.noAppointments')}</div>;
 
   return (
     <div className="overflow-x-auto">
       <div className="mb-3 text-gray-700 text-sm">
-        This table shows all reserved appointments. You can sort by any column by clicking the ⇅ button next to the column name. Use this view to quickly find, review, or manage customer bookings. Click the delete button to remove an appointment. Click the date or time to edit them.
+        {t('adminReservedTable.instructions')}
       </div>
-      <table className="min-w-full border border-gray-300">
+      <table dir="ltr" className="min-w-full border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
-            <th className="px-4 py-2 border">Name <button onClick={() => handleSort('customerName')} className="ml-1 text-xs">⇅</button></th>
-            <th className="px-4 py-2 border">Email <button onClick={() => handleSort('customerEmail')} className="ml-1 text-xs">⇅</button></th>
-            <th className="px-4 py-2 border">Day <button onClick={() => handleSort('dayName')} className="ml-1 text-xs">⇅</button></th>
-            <th className="px-4 py-2 border">Date <button onClick={() => handleSort('date')} className="ml-1 text-xs">⇅</button></th>
-            <th className="px-4 py-2 border">Time <button onClick={() => handleSort('time')} className="ml-1 text-xs">⇅</button></th>
-            <th className="px-4 py-2 border">Delete</th>
+            <th className="px-4 py-2 border">{t('adminReservedTable.name')} <button onClick={() => handleSort('customerName')} className="ml-1 text-xs">⇅</button></th>
+            <th className="px-4 py-2 border">{t('adminReservedTable.email')} <button onClick={() => handleSort('customerEmail')} className="ml-1 text-xs">⇅</button></th>
+            <th className="px-4 py-2 border">{t('adminReservedTable.day')} <button onClick={() => handleSort('dayName')} className="ml-1 text-xs">⇅</button></th>
+            <th className="px-4 py-2 border">{t('adminReservedTable.date')} <button onClick={() => handleSort('date')} className="ml-1 text-xs">⇅</button></th>
+            <th className="px-4 py-2 border">{t('adminReservedTable.time')} <button onClick={() => handleSort('time')} className="ml-1 text-xs">⇅</button></th>
+            <th className="px-4 py-2 border">{t('adminReservedTable.delete')}</th>
           </tr>
         </thead>
         <tbody>
@@ -151,11 +153,11 @@ function AdminReservedTable({ axios }) {
                 <td className="px-4 py-2 border text-center">
                   {editingIdx === idx ? (
                     <>
-                      <button onClick={() => handleDateSave(appt)} className="text-green-600 hover:underline mr-2">Save</button>
-                      <button onClick={() => setEditingIdx(null)} className="text-gray-600 hover:underline">Cancel</button>
+                      <button onClick={() => handleDateSave(appt)} className="text-green-600 hover:underline mr-2">{t('adminReservedTable.save')}</button>
+                      <button onClick={() => setEditingIdx(null)} className="text-gray-600 hover:underline">{t('adminReservedTable.cancel')}</button>
                     </>
                   ) : (
-                    <button onClick={() => handleDelete(appt.userId)} className="text-red-600 hover:underline">Delete</button>
+                    <button onClick={() => handleDelete(appt.userId)} className="text-red-600 hover:underline">{t('adminReservedTable.delete')}</button>
                   )}
                 </td>
               </tr>

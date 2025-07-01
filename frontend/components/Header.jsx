@@ -5,7 +5,7 @@ function Header({ isOpen, setIsOpen }) {
     const navigate = useNavigate();
     return (
         <>
-        <header className="select-none flex items-center justify-between p-4 bg-gray-900 text-white">
+        <header dir="ltr" className="select-none flex items-center justify-between p-4 bg-gray-900 text-white">
             <h1
                 className="cursor-pointer text-4xl font-bold hover:opacity-60 duration-300"
                 onClick={() => navigate("/")}

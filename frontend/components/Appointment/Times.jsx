@@ -3,11 +3,14 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useTranslation } from 'react-i18next';
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 const ISRAEL_TZ = "Asia/Jerusalem";
 
 function Times({ date, onSelect, userId }) {
+  const { t } = useTranslation();
   const [selectedTime, setSelectedTime] = useState(null);
   const [appointment, setAppointment] = useState(null);
   const [times, setTimes] = useState([]);
@@ -102,14 +105,14 @@ function Times({ date, onSelect, userId }) {
     return (
       <div className="mt-4 p-4 bg-gray-100 rounded shadow">
         <div className="mt-4 p-4 bg-white rounded shadow text-center">
-          <div className="text-lg font-semibold text-blue-700 mb-2">Appointment</div>
-          <div className="mb-2">{dayjs(appointment.date).format('DD/MM/YYYY')} at {appointment.time}</div>
+          <div className="text-lg font-semibold text-blue-700 mb-2">{t('times.appointmentTitle')}</div>
+          <div className="mb-2">{dayjs(appointment.date).format('DD/MM/YYYY')} {t('times.at')} {appointment.time}</div>
           <button
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
             onClick={handleDelete}
             disabled={loading}
           >
-            Delete Appointment
+            {t('times.deleteButton')}
           </button>
         </div>
       </div>
@@ -118,9 +121,9 @@ function Times({ date, onSelect, userId }) {
   if (!date) return null;
   return (
     <div className="mt-4 p-4 bg-gray-100 rounded shadow">
-      <h2 className="text-lg font-bold mb-2">Available Times for {dayjs(date).format('DD/MM/YYYY')}</h2>
-      {error && <div className="text-red-600 mb-2">{error}</div>}
-      {loading && <div className="text-gray-500 mb-2">Loading...</div>}
+      <h2 className="text-lg font-bold mb-2">{t('times.availableTitle', { date: dayjs(date).format('DD/MM/YYYY') })}</h2>
+      {error && <div className="text-red-600 mb-2">{t(error)}</div>}
+      {loading && <div className="text-gray-500 mb-2">{t('times.loading')}</div>}
       <div className="flex flex-wrap gap-2 mb-4">
         {times && times.length > 0 ? (
           times.map((time) => (
@@ -139,7 +142,7 @@ function Times({ date, onSelect, userId }) {
             </button>
           ))
         ) : (
-          <span className="text-gray-500">No times available</span>
+          <span className="text-gray-500">{t('times.noTimes')}</span>
         )}
       </div>
       {!appointment && selectedTime && (
@@ -148,19 +151,19 @@ function Times({ date, onSelect, userId }) {
           onClick={handleConfirm}
           disabled={loading}
         >
-          Confirm
+          {t('times.confirmButton')}
         </button>
       )}
       {appointment && (
         <div className="mt-6 p-4 bg-white rounded shadow text-center">
-          <div className="text-lg font-semibold text-blue-700 mb-2">Appointment</div>
-          <div className="mb-2">{dayjs(appointment.date).format('DD/MM/YYYY')} at {appointment.time}</div>
+          <div className="text-lg font-semibold text-blue-700 mb-2">{t('times.appointmentTitle')}</div>
+          <div className="mb-2">{dayjs(appointment.date).format('DD/MM/YYYY')} {t('times.at')} {appointment.time}</div>
           <button
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
             onClick={handleDelete}
             disabled={loading}
           >
-            Delete Appointment
+            {t('times.deleteButton')}
           </button>
         </div>
       )}

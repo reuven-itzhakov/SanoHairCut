@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { UserContext } from "../SideBar.jsx";
+import { useTranslation } from 'react-i18next';
 
 function HomePage({ setSidebarOpen, navigate }) {
+    const { t } = useTranslation();
     const [user] = useContext(UserContext);
 
     const handleBookClick = (e) => {
@@ -17,64 +19,64 @@ function HomePage({ setSidebarOpen, navigate }) {
         <div className="min-h-screen bg-gray-50">
             {/* Hero Section */}
             <div className="relative bg-black text-white h-[50vh] flex items-center justify-center">
-                <img src="/images/barbershop-hero.png" alt="Barbershop" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+                <img src="/images/barbershop-hero.png" alt={t('home.hero.imgAlt')} className="absolute inset-0 w-full h-full object-cover opacity-60" />
                 <div className="relative z-10 text-center">
-                    <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">Look Sharp. Feel Great.</h1>
-                    <p className="text-lg md:text-2xl mb-6">Premium cuts & shaves in the heart of the city</p>
+                    <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">{t('home.hero.title')}</h1>
+                    <p className="text-lg md:text-2xl mb-6">{t('home.hero.subtitle')}</p>
                     <button
                         onClick={handleBookClick}
                         className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-8 rounded-full shadow-lg transition"
                     >
-                        Book Your Appointment
+                        {t('home.hero.bookButton')}
                     </button>
                 </div>
             </div>
 
             {/* About Section */}
             <div className="max-w-3xl mx-auto py-12 px-4 text-center">
-                <h2 className="text-2xl font-bold mb-2">Welcome to Mano Barbershop</h2>
-                <p className="text-gray-700 mb-4">Experience the art of grooming in a modern, friendly atmosphere. Our skilled barbers are passionate about helping you look and feel your best. Whether you need a fresh cut, a sharp beard trim, or a relaxing shave, we’ve got you covered.</p>
+                <h2 className="text-2xl font-bold mb-2">{t('home.about.title')}</h2>
+                <p className="text-gray-700 mb-4">{t('home.about.text')}</p>
             </div>
 
             {/* Services Section */}
             <div className="bg-white py-10">
-                <h2 className="text-xl font-bold text-center mb-6">Our Services</h2>
+                <h2 className="text-xl font-bold text-center mb-6">{t('home.services.title')}</h2>
                 <div className="flex flex-wrap justify-center gap-8 max-w-8xl mx-auto">
                     <div className="bg-gray-100 rounded-lg p-6 w-[400px] shadow text-center">
-                        <img src="/images/haircut.png" alt="Haircut" className="mx-auto mb-2 w-[400px]" />
-                        <h3 className="text-xl font-semibold mb-1">Haircut</h3>
-                        <p className="text-gray-600 text-md">Classic, modern, and custom styles for all ages.</p>
+                        <img src="/images/haircut.png" alt={t('home.services.haircutAlt')} className="mx-auto mb-2 w-[400px]" />
+                        <h3 className="text-xl font-semibold mb-1">{t('home.services.haircut')}</h3>
+                        <p className="text-gray-600 text-md">{t('home.services.haircutDesc')}</p>
                     </div>
                     <div className="bg-gray-100 rounded-lg p-6 w-[400px] shadow text-center">
-                        <img src="/images/beard.png" alt="Beard Trim" className="mx-auto mb-2 w-[400px]" />
-                        <h3 className="text-xl font-semibold mb-1">Beard Trim</h3>
-                        <p className="text-gray-600 text-md">Sharp lines, clean fades, and beard sculpting.</p>
+                        <img src="/images/beard.png" alt={t('home.services.beardAlt')} className="mx-auto mb-2 w-[400px]" />
+                        <h3 className="text-xl font-semibold mb-1">{t('home.services.beard')}</h3>
+                        <p className="text-gray-600 text-md">{t('home.services.beardDesc')}</p>
                     </div>
                     <div className="bg-gray-100 rounded-lg p-6 w-[400px] shadow text-center">
-                        <img src="/images/shave.png" alt="Shave" className="mx-auto mb-2 w-[400px]" />
-                        <h3 className="text-xl font-semibold mb-1">Shave</h3>
-                        <p className="text-gray-600 text-md">Hot towel shaves for a smooth, fresh look.</p>
+                        <img src="/images/shave.png" alt={t('home.services.shaveAlt')} className="mx-auto mb-2 w-[400px]" />
+                        <h3 className="text-xl font-semibold mb-1">{t('home.services.shave')}</h3>
+                        <p className="text-gray-600 text-md">{t('home.services.shaveDesc')}</p>
                     </div>
                 </div>
             </div>
 
             {/* Gallery Section */}
             <div className="max-w-8xl mx-auto py-12 px-4">
-                <h2 className="text-xl font-bold text-center mb-6">Gallery</h2>
+                <h2 className="text-xl font-bold text-center mb-6">{t('home.gallery.title')}</h2>
                 <div className="relative overflow-hidden">
                     <div
                         className="flex gap-4 w-max animate-gallery-scroll"
                         style={{ animation: 'gallery-scroll 30s linear infinite' }}
                     >
-                        <img src="/images/gallery1.png" alt="Gallery 1" className="rounded shadow object-cover w-[300px]" />
-                        <img src="/images/gallery2.png" alt="Gallery 2" className="rounded shadow object-cover w-[300px]" />
-                        <img src="/images/gallery3.png" alt="Gallery 3" className="rounded shadow object-cover w-[300px]" />
-                        <img src="/images/gallery4.png" alt="Gallery 4" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery1.png" alt={t('home.gallery.img1Alt')} className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery2.png" alt={t('home.gallery.img2Alt')} className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery3.png" alt={t('home.gallery.img3Alt')} className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery4.png" alt={t('home.gallery.img4Alt')} className="rounded shadow object-cover w-[300px]" />
                         {/* Duplicate images for seamless loop */}
-                        <img src="/images/gallery1.png" alt="Gallery 1" className="rounded shadow object-cover w-[300px]" />
-                        <img src="/images/gallery2.png" alt="Gallery 2" className="rounded shadow object-cover w-[300px]" />
-                        <img src="/images/gallery3.png" alt="Gallery 3" className="rounded shadow object-cover w-[300px]" />
-                        <img src="/images/gallery4.png" alt="Gallery 4" className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery1.png" alt={t('home.gallery.img1Alt')} className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery2.png" alt={t('home.gallery.img2Alt')} className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery3.png" alt={t('home.gallery.img3Alt')} className="rounded shadow object-cover w-[300px]" />
+                        <img src="/images/gallery4.png" alt={t('home.gallery.img4Alt')} className="rounded shadow object-cover w-[300px]" />
                     </div>
                 </div>
                 <style>{`
@@ -87,27 +89,27 @@ function HomePage({ setSidebarOpen, navigate }) {
 
             {/* Testimonials Section */}
             <div className="bg-gray-100 py-10">
-                <h2 className="text-xl font-bold text-center mb-6">What Our Customers Say</h2>
+                <h2 className="text-xl font-bold text-center mb-6">{t('home.testimonials.title')}</h2>
                 <div className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
                     <div className="bg-white rounded-lg p-6 w-72 shadow text-center">
-                        <p className="italic mb-2">“Best haircut I’ve ever had! The team is super friendly and professional.”</p>
-                        <div className="font-semibold">— Daniel S.</div>
+                        <p className="italic mb-2">{t('home.testimonials.quote1')}</p>
+                        <div className="font-semibold">— {t('home.testimonials.author1')}</div>
                     </div>
                     <div className="bg-white rounded-lg p-6 w-72 shadow text-center">
-                        <p className="italic mb-2">“Great atmosphere and amazing beard trims. Highly recommend!”</p>
-                        <div className="font-semibold">— Amir K.</div>
+                        <p className="italic mb-2">{t('home.testimonials.quote2')}</p>
+                        <div className="font-semibold">— {t('home.testimonials.author2')}</div>
                     </div>
                 </div>
             </div>
 
             {/* Contact Section */}
             <div className="max-w-3xl mx-auto py-12 px-4 text-center">
-                <h2 className="text-xl font-bold mb-2">Contact & Location</h2>
-                <p className="mb-2">Lotem Street, Afula</p>
-                <p className="mb-2">Phone: <a href="tel:+972548343989" className="text-blue-600 underline">+972-54-8343-989</a></p>
+                <h2 className="text-xl font-bold mb-2">{t('home.contact.title')}</h2>
+                <p className="mb-2">{t('home.contact.address')}</p>
+                <p className="mb-2">{t('home.contact.phone')} <a href="tel:+972548343989" className="text-blue-600 underline">+972-54-8343-989</a></p>
                 <div className="mt-4">
                     <iframe
-                        title="Barbershop Location"
+                        title={t('home.contact.mapTitle')}
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2376.3276798275065!2d35.28308401349291!3d32.61591373701139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c53c7be9edd7b%3A0x59d44bdc468df1e9!2sLotem%20St%2026%2C%20Afula!5e0!3m2!1sen!2sil!4v1750775442826!5m2!1sen!2sil" // Replace with your real map embed link
                         width="100%"
                         height="200"
@@ -120,12 +122,12 @@ function HomePage({ setSidebarOpen, navigate }) {
                 <div className="flex justify-center gap-4 mt-4 items-center">
                     <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-pink-600 text-2xl flex items-center gap-2">
                         <img src="https://www.svgrepo.com/show/452231/instagram.svg" alt="Instagram" className="w-7 h-7" />
-                        <span className="hidden sm:inline">Instagram</span>
+                        <span className="hidden sm:inline">{t('home.contact.instagram')}</span>
                     </a>
                     <span className="text-gray-400 text-2xl select-none">|</span>
                     <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-blue-600 text-2xl flex items-center gap-2">
                         <img src="https://www.svgrepo.com/show/448224/facebook.svg" alt="Facebook" className="w-7 h-7" />
-                        <span className="hidden sm:inline">Facebook</span>
+                        <span className="hidden sm:inline">{t('home.contact.facebook')}</span>
                     </a>
                 </div>
             </div>

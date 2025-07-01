@@ -8,15 +8,28 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase.js';
 import { UserContext } from '../components/SideBar.jsx';
+import '../src/i18n.js'; // Import i18n initialization
+import { useTranslation } from 'react-i18next';
 
 function App() {
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    // Set dir attribute on <html> for RTL/LTR support
+    if (i18n.language === 'he') {
+      document.documentElement.setAttribute('dir', 'rtl');
+    } else {
+      document.documentElement.setAttribute('dir', 'ltr');
+    }
+  }, [i18n.language]);
 
   return (
     <>

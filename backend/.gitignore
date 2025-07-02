@@ -1,6 +1,19 @@
 # Ignore sensitive files and folders
 firebase-admin.json
 .env
+.env.*
+.env.local
+.env.development
+.env.production
+.env.test
+firebase-debug.log
+firebase-debug.*.log
+serviceAccountKey.json
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
 
 # Node modules
 node_modules/

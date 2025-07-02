@@ -1,2 +1,3 @@
 start cmd /k "cd /d frontend && npm run host"
-start cmd /k "cd /d backend && nodemon index.js"
+echo "Note: Backend now runs on Vercel serverless functions"
+echo "For local development, use: vercel dev"

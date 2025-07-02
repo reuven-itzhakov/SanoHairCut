@@ -11,6 +11,7 @@ import AdminToolsTabs from '../Admin/AdminToolsTabs.jsx';
 import AdminSetTimes from '../Admin/AdminSetTimes.jsx';
 import AdminReservedTable from '../Admin/AdminReservedTable.jsx';
 import AdminUsersTable from '../Admin/AdminUsersTable.jsx';
+import { API_BASE_URL } from '../../src/config.js';
 
 function AdminTools({ user }) {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ function AdminTools({ user }) {
   // Check if the user is an admin on mount or user change
   useEffect(() => {
     if (user && user.uid) {
-      axios.get(`http://localhost:5000/api/profile/${user.uid}`)
+      axios.get(`${API_BASE_URL}/api/users?profile=true&uid=${user.uid}`)
         .then(res => setIsAdmin(res.data.isAdmin === true))
         .catch(() => setIsAdmin(false));
     } else {
@@ -45,18 +46,18 @@ function AdminTools({ user }) {
       <h2 className="font-bold text-2xl text-center mb-2">{t('adminTools.title')}</h2>
       <AdminToolsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       {activeTab === 'times' && (
-        <AdminSetTimes user={user} axios={axios} />
+        <AdminSetTimes user={user} />
       )}
       {activeTab === 'reserved' && (
         <div className="bg-white rounded shadow p-4 mt-4">
           <h3 className="font-bold text-lg mb-2">{t('adminTools.reservedTitle')}</h3>
-          <AdminReservedTable axios={axios} />
+          <AdminReservedTable />
         </div>
       )}
       {activeTab === 'users' && (
         <div className="bg-white rounded shadow p-4 mt-4">
           <h3 className="font-bold text-lg mb-2">{t('adminTools.usersTitle')}</h3>
-          <AdminUsersTable axios={axios} />
+          <AdminUsersTable />
         </div>
       )}
     </div>

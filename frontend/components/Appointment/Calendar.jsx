@@ -6,6 +6,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../../src/config.js';
 
 function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate();
@@ -50,7 +51,7 @@ function Calendar({ onDaySelect, adminMode = false }) {
         const d = String(date.getDate()).padStart(2, '0');
         const dateStr = `${y}-${m}-${d}`;
         try {
-          const res = await axios.get(`http://localhost:5000/api/available-times/${dateStr}`);
+          const res = await axios.get(`${API_BASE_URL}/api/available-times?date=${dateStr}`);
           days[day] = (res.data.times && res.data.times.length > 0);
         } catch {
           days[day] = false;

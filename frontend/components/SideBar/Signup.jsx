@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/
 import { auth } from "../../firebase.js";
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../../src/config.js';
 
 function Signup({setTab}){
     const { t } = useTranslation();
@@ -49,7 +50,7 @@ function Signup({setTab}){
             // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
             // Create user document in Firestore via backend
-            await axios.post("http://localhost:5000/api/users", {
+            await axios.post(`${API_BASE_URL}/api/users`, {
                 uid: userCredential.user.uid,
                 name: data.name,
                 email: data.email

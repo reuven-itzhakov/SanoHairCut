@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from '../SideBar.jsx';
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../../src/config.js';
 
 function User(){
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ function User(){
     // Check if user is admin on mount or user change
     useEffect(() => {
         if (user && user.uid) {
-            axios.get(`http://localhost:5000/api/profile/${user.uid}`)
+            axios.get(`${API_BASE_URL}/api/users?profile=true&uid=${user.uid}`)
                 .then(res => setIsAdmin(res.data.isAdmin === true))
                 .catch(() => setIsAdmin(false));
         } else {

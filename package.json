@@ -1,0 +1,17 @@
+{
+  "name": "sano-fullstack",
+  "version": "1.0.0",
+  "description": "Barbershop appointment system - Full-stack Vercel deployment",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "cd frontend && npm run build",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}

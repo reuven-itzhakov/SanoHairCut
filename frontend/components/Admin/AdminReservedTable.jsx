@@ -6,8 +6,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
+import axios from 'axios';
+import { API_BASE_URL } from '../../src/config.js';
 
-function AdminReservedTable({ axios }) {
+function AdminReservedTable() {
   const { t } = useTranslation();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ function AdminReservedTable({ axios }) {
   // Fetch appointments on mount
   useEffect(() => {
     setLoading(true);
-    axios.get('http://localhost:5000/api/appointments')
+    axios.get(`${API_BASE_URL}/api/appointments`)
       .then(res => {
         setAppointments(res.data.appointments || []);
         setError('');
@@ -47,7 +49,7 @@ function AdminReservedTable({ axios }) {
   const handleDelete = async (userId) => {
     if (!window.confirm('Are you sure you want to delete this appointment?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/appointments/${userId}`);
+      await axios.delete(`${API_BASE_URL}/api/appointments?userId=${userId}`);
       setAppointments((prev) => prev.filter(appt => appt.userId !== userId));
     } catch (err) {
       alert('Failed to delete appointment.');
@@ -74,7 +76,7 @@ function AdminReservedTable({ axios }) {
   // Save the edited date/time
   const handleDateSave = async (appt) => {
     try {
-      await axios.post(`http://localhost:5000/api/appointments/${appt.userId}/change-date`, {
+      await axios.post(`${API_BASE_URL}/api/appointments?userId=${appt.userId}&action=change-date`, {
         date: newDate,
         time: newTime
       });

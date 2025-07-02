@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import Calendar from '../Appointment/Calendar.jsx';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { API_BASE_URL } from '../../src/config.js';
 
 const ISRAEL_TZ = "Asia/Jerusalem";
 
@@ -25,7 +27,7 @@ function generateTimeSlots(start = '08:00', end = '20:00', interval = 30) {
 const ALL_TIMES = generateTimeSlots();
 const now = dayjs(); // Current time for filtering out past slots
 
-function AdminSetTimes({ user, axios, onResult }) {
+function AdminSetTimes({ user, onResult }) {
   const { t } = useTranslation();
   const [date, setDate] = useState('');
   const [selectedTimes, setSelectedTimes] = useState([]);
@@ -35,7 +37,7 @@ function AdminSetTimes({ user, axios, onResult }) {
   // Fetch available times for the selected date from backend
   useEffect(() => {
     if (!date) return;
-    axios.get(`http://localhost:5000/api/available-times/${dayjs(date).tz(ISRAEL_TZ).format('YYYY-MM-DD')}`)
+    axios.get(`${API_BASE_URL}/api/available-times?date=${dayjs(date).tz(ISRAEL_TZ).format('YYYY-MM-DD')}`)
       .then(res => {
         setSelectedTimes(res.data.times || []);
       })
@@ -67,7 +69,7 @@ function AdminSetTimes({ user, axios, onResult }) {
     setResult('');
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/admin/available-times', {
+      await axios.post(`${API_BASE_URL}/api/admin/available-times`, {
         uid: user.uid,
         date,
         times: selectedTimes.sort()

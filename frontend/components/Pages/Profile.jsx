@@ -9,6 +9,7 @@ import { updateEmail, sendEmailVerification, signOut, updatePassword, EmailAuthP
 import { auth } from "../../firebase"; // Import auth from your firebase configuration
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../../src/config.js';
 
 function Profile() {
     const { t } = useTranslation();
@@ -24,7 +25,7 @@ function Profile() {
     // Load current first name from backend on mount
     useEffect(() => {
         if (user) {
-            axios.get(`http://localhost:5000/api/profile/${user.uid}`)
+            axios.get(`${API_BASE_URL}/api/users?profile=true&uid=${user.uid}`)
                 .then(res => {
                     setName(res.data.name || "");
                 })
@@ -51,7 +52,7 @@ function Profile() {
         }
         try {
             // Update name in backend
-            await axios.post(`http://localhost:5000/api/profile/${user.uid}`, { name });
+            await axios.post(`${API_BASE_URL}/api/users?profile=true&uid=${user.uid}`, { name });
             // Update email in Firebase Auth if changed
             if (user && email !== user.email) {
                 if (!user.emailVerified) {

@@ -5,8 +5,10 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { API_BASE_URL } from '../../src/config.js';
 
-function AdminUsersTable({ axios }) {
+function AdminUsersTable() {
   const { t } = useTranslation();
   const [users, setUsers] = useState([]); // List of users
   const [loading, setLoading] = useState(true); // Loading state
@@ -17,7 +19,7 @@ function AdminUsersTable({ axios }) {
   // Fetch all users on mount
   useEffect(() => {
     setLoading(true);
-    axios.get('http://localhost:5000/api/users')
+    axios.get(`${API_BASE_URL}/api/users`)
       .then(res => {
         setUsers(res.data.users || []);
         setError('');
@@ -51,7 +53,7 @@ function AdminUsersTable({ axios }) {
   // Save edited user info
   const handleEditSave = async (user) => {
     try {
-      await axios.post(`http://localhost:5000/api/users/${user.uid}/update`, {
+      await axios.post(`${API_BASE_URL}/api/users?uid=${user.uid}&action=update`, {
         name: editUser.name,
         email: editUser.email,
         isAdmin: editUser.isAdmin

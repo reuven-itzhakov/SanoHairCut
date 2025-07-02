@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../../src/config.js';
 
 // Extend dayjs with timezone support
 dayjs.extend(utc);
@@ -40,7 +41,7 @@ function Times({ date, onSelect, userId }) {
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
-    axios.get(`http://localhost:5000/api/appointments/${userId}`)
+    axios.get(`${API_BASE_URL}/api/appointments?userId=${userId}`)
       .then(res => {
         if (res.data.appointment) {
           setAppointment({
@@ -62,7 +63,7 @@ function Times({ date, onSelect, userId }) {
   useEffect(() => {
     if (!date) return;
     setLoading(true);
-    axios.get(`http://localhost:5000/api/available-times/${formatDateIsrael(date)}`)
+    axios.get(`${API_BASE_URL}/api/available-times?date=${formatDateIsrael(date)}`)
       .then(res => {
         setTimes(res.data.times || []);
         setLoading(false);
@@ -77,7 +78,7 @@ function Times({ date, onSelect, userId }) {
   const handleConfirm = () => {
     if (selectedTime && date && userId) {
       setLoading(true);
-      axios.post("http://localhost:5000/api/appointments", {
+      axios.post(`${API_BASE_URL}/api/appointments`, {
         userId,
         date: formatDateIsrael(date),
         time: selectedTime
@@ -97,7 +98,7 @@ function Times({ date, onSelect, userId }) {
   const handleDelete = () => {
     if (!userId) return;
     setLoading(true);
-    axios.delete(`http://localhost:5000/api/appointments/${userId}`)
+    axios.delete(`${API_BASE_URL}/api/appointments?userId=${userId}`)
       .then(() => {
         setAppointment(null);
         setSelectedTime(null);

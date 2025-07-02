@@ -1,37 +1,37 @@
-const express = require("express");
-const cors = require("cors");
-const admin = require("firebase-admin");
-const serviceAccount = require("./firebase-admin.json");
+// index.js
+// Main entry point for the backend Express server.
+// Initializes Firebase Admin SDK, sets up middleware, and registers API routes.
 
+const express = require("express"); // Express web framework
+const cors = require("cors"); // Middleware for enabling CORS
+const admin = require("firebase-admin"); // Firebase Admin SDK
+const serviceAccount = require("./firebase-admin.json"); // Service account credentials
+
+// Initialize Firebase Admin SDK with service account and storage bucket
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: "sanohaircut.appspot.com"
 });
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-const db = admin.firestore();
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); // Parse JSON request bodies
+const db = admin.firestore(); // Firestore database instance
 
 // Routers
+// Import and register the appointments API router
 const appointmentsRouter = require("./routes/appointments")(db, admin);
 app.use("/api", appointmentsRouter);
+// Import and register the user API router
 const userRouter = require("./routes/user")(db, admin);
 app.use("/api", userRouter);
+// Import and register the times API router
 const timesRouter = require("./routes/times")(db, admin);
 app.use("/api", timesRouter);
 
-
+// Start the server on the specified port
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-
-// Now you can use Admin SDK services
-// const auth = admin.auth();
-// const db = admin.firestore();
-// auth.listUsers(1000).then(() => { ... });
-
-// SITE KEY:   6LeBukcrAAAAAH3v-01Y-y-uOTAd4RtCtB5CEyUW
-// SECRET KEY: 6LeBukcrAAAAAOBOlSLndpK70bmanCi_7rqG3vlp

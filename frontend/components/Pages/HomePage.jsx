@@ -1,3 +1,8 @@
+// HomePage.jsx
+// Main landing page for the barbershop appointment system.
+// Shows branding, hero image, and navigation to booking or admin tools.
+// Uses i18n for translations.
+
 import React, { useContext } from "react";
 import { UserContext } from "../SideBar.jsx";
 import { useTranslation } from 'react-i18next';
@@ -6,12 +11,13 @@ function HomePage({ setSidebarOpen, navigate }) {
     const { t } = useTranslation();
     const [user] = useContext(UserContext);
 
+    // Handle click on book button
     const handleBookClick = (e) => {
         e.preventDefault();
         if (user) {
-            navigate("/appointment");
+            navigate("/appointment"); // Navigate to appointment page if user is logged in
         } else {
-            setSidebarOpen(true);
+            setSidebarOpen(true); // Open sidebar for login if user is not logged in
         }
     };
 

@@ -1,3 +1,8 @@
+// Profile.jsx
+// User profile page for viewing and updating name, email, and password.
+// Integrates with Firebase Auth and backend API for profile management.
+// Uses i18n for translations.
+
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../SideBar.jsx";
 import { updateEmail, sendEmailVerification, signOut, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
@@ -16,7 +21,7 @@ function Profile() {
     const [newPassword, setNewPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
 
-    // Load current first name from Firestore on mount
+    // Load current first name from backend on mount
     useEffect(() => {
         if (user) {
             axios.get(`http://localhost:5000/api/profile/${user.uid}`)
@@ -27,6 +32,7 @@ function Profile() {
         }
     }, [user]);
 
+    // Handle profile update (name/email)
     const handleProfileUpdate = async (e) => {
         e.preventDefault();
         setSuccess("");
@@ -67,6 +73,7 @@ function Profile() {
         }
     };
 
+    // Handle password update
     const handlePasswordUpdate = async (e) => {
         e.preventDefault();
         setSuccess("");
@@ -92,6 +99,7 @@ function Profile() {
         }
     };
 
+    // Render profile and password update forms
     return (
         <div className="max-w-md mx-auto p-4">
             <h1 className="font-bold text-2xl text-center mb-2">{t('profile.title')}</h1>

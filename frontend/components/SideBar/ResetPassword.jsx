@@ -1,3 +1,8 @@
+// ResetPassword.jsx
+// Component for users to request a password reset email.
+// Allows entering an email and sends a reset link via Firebase Auth.
+// Uses i18n for translations.
+
 import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -9,17 +14,21 @@ function ResetPassword({setTab}){
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
 
+    // Handle password reset request
     const handleReset = async () => {
         setSuccess("");
         setError("");
+        // Validate email input
         if (!email.trim()) {
             setError(t('reset.error.required'));
             return;
         }
         try {
+            // Send password reset email
             await sendPasswordResetEmail(auth, email);
             setSuccess(t('reset.success'));
         } catch (err) {
+            // Handle error in sending email
             setError(t('reset.error.failed') + (err.message ? ' ' + err.message : ''));
         }
     };

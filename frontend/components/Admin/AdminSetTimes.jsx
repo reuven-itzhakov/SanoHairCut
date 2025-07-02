@@ -1,3 +1,8 @@
+// AdminSetTimes.jsx
+// Admin tool for setting available appointment times for a selected date.
+// Allows admin to pick a date, select/deselect time slots, and submit to backend.
+// Uses dayjs for date/time handling and a custom Calendar component for date picking.
+
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import Calendar from '../Appointment/Calendar.jsx';
@@ -5,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 const ISRAEL_TZ = "Asia/Jerusalem";
 
+// Generate all possible time slots for a day (default: 08:00-20:00, every 30 min)
 function generateTimeSlots(start = '08:00', end = '20:00', interval = 30) {
   const slots = [];
   let current = dayjs(`2020-01-01T${start}`);
@@ -17,7 +23,7 @@ function generateTimeSlots(start = '08:00', end = '20:00', interval = 30) {
 }
 
 const ALL_TIMES = generateTimeSlots();
-const now = dayjs();
+const now = dayjs(); // Current time for filtering out past slots
 
 function AdminSetTimes({ user, axios, onResult }) {
   const { t } = useTranslation();
@@ -38,6 +44,7 @@ function AdminSetTimes({ user, axios, onResult }) {
       });
   }, [date, axios]);
 
+  // Toggle a time slot selection
   const handleTimeClick = (time) => {
     setSelectedTimes((prev) =>
       prev.includes(time) ? prev.filter(t => t !== time) : [...prev, time]
@@ -49,9 +56,12 @@ function AdminSetTimes({ user, axios, onResult }) {
     ? ALL_TIMES.filter(time => dayjs(`${date}T${time}`) > now)
     : ALL_TIMES;
 
+  // Select all available times for the day
   const handleSelectAll = () => setSelectedTimes(filteredTimes);
+  // Clear all selected times
   const handleClearAll = () => setSelectedTimes([]);
 
+  // Submit selected times to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     setResult('');
@@ -71,6 +81,7 @@ function AdminSetTimes({ user, axios, onResult }) {
     setLoading(false);
   };
 
+  // Handle date selection from calendar
   const handleCalendarDaySelect = (day, month, year) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     setDate(dateStr);
@@ -78,6 +89,7 @@ function AdminSetTimes({ user, axios, onResult }) {
 
   return (
     <div>
+      {/* Instructions and calendar for picking date */}
       <div className="text-center text-gray-700 mb-4">
         <div className="mb-2">
           {t('adminSetTimes.instructions')}
@@ -97,6 +109,7 @@ function AdminSetTimes({ user, axios, onResult }) {
             <label>{t('adminSetTimes.times')}</label>
             <div className="flex flex-wrap gap-2 mt-2 mb-2">
               {filteredTimes.map(time => (
+                // Render a button for each time slot
                 <button
                   type="button"
                   key={time}

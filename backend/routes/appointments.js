@@ -1,9 +1,14 @@
 const express = require("express");
 
+// This module exports a function that sets up appointment-related API routes.
+// It requires a Firestore database instance (db) and the Firebase Admin SDK (admin).
 module.exports = (db, admin) => {
   const router = express.Router();
 
   // Reserve an appointment
+  // POST /appointments
+  // Body: { userId, date, time }
+  // Checks if the time is available and the user doesn't already have an appointment, then reserves it.
   router.post("/appointments", async (req, res) => {
     const { userId, date, time } = req.body;
     if (!userId || !date || !time) {
@@ -33,6 +38,8 @@ module.exports = (db, admin) => {
   });
 
   // Get user's appointment
+  // GET /appointments/:userId
+  // Returns the user's current appointment, or null if none. Moves past appointments to history.
   router.get("/appointments/:userId", async (req, res) => {
     try {
       const snap = await db.collection("appointments").where("userId", "==", req.params.userId).get();
@@ -56,6 +63,8 @@ module.exports = (db, admin) => {
   });
 
   // Delete user's appointment
+  // DELETE /appointments/:userId
+  // Deletes the user's appointment and adds the time back to available times.
   router.delete("/appointments/:userId", async (req, res) => {
     try {
       const snap = await db.collection("appointments").where("userId", "==", req.params.userId).get();
@@ -85,6 +94,8 @@ module.exports = (db, admin) => {
   });
 
   // Get all appointments (for admin)
+  // GET /appointments
+  // Returns all appointments with customer info for admin use.
   router.get("/appointments", async (req, res) => {
     try {
       const snap = await db.collection("appointments").get();
@@ -108,6 +119,9 @@ module.exports = (db, admin) => {
   });
 
   // Change appointment date (admin)
+  // POST /appointments/:userId/change-date
+  // Body: { date, time }
+  // Allows admin to change a user's appointment date and time, updating available times accordingly.
   router.post("/appointments/:userId/change-date", async (req, res) => {
     const { date, time } = req.body;
     const { userId } = req.params;
@@ -115,12 +129,12 @@ module.exports = (db, admin) => {
       return res.status(400).json({ error: "Missing date or time" });
     }
     try {
-      // Find the appointment
+      // Find the appointment for the user
       const snap = await db.collection("appointments").where("userId", "==", userId).get();
       if (snap.empty) return res.status(404).json({ error: "Appointment not found" });
       const doc = snap.docs[0];
       const oldData = doc.data();
-      // Remove time from old date's availableTimes
+      // Add the old time back to the old date's availableTimes
       const oldTimesRef = db.collection("availableTimes").doc(oldData.date);
       const oldTimesDoc = await oldTimesRef.get();
       if (oldTimesDoc.exists) {
@@ -130,13 +144,13 @@ module.exports = (db, admin) => {
       } else {
         await oldTimesRef.set({ times: [oldData.time] });
       }
-      // Remove time from new date's availableTimes
+      // Remove the new time from the new date's availableTimes
       const newTimesRef = db.collection("availableTimes").doc(date);
       const newTimesDoc = await newTimesRef.get();
       let newTimes = newTimesDoc.exists ? newTimesDoc.data().times : [];
       newTimes = newTimes.filter(t => t !== time);
       await newTimesRef.set({ times: newTimes });
-      // Update appointment
+      // Update the appointment document with the new date and time
       await db.collection("appointments").doc(doc.id).update({ date, time });
       res.json({ message: "Appointment date updated" });
     } catch (err) {

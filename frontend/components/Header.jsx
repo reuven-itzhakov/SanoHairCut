@@ -1,3 +1,8 @@
+// Header.jsx
+// Main site header with branding and sidebar toggle.
+// Displays the site title and a user/profile icon to open the sidebar.
+// Uses react-router for navigation.
+
 import SideBar from "./SideBar.jsx"
 import { useNavigate } from "react-router-dom";
 
@@ -5,6 +10,7 @@ function Header({ isOpen, setIsOpen }) {
     const navigate = useNavigate();
     return (
         <>
+        {/* Header bar with site title and user icon */}
         <header dir="ltr" className="select-none flex items-center justify-between p-4 bg-gray-900 text-white">
             <h1
                 className="cursor-pointer text-4xl font-bold hover:opacity-60 duration-300"
@@ -12,6 +18,7 @@ function Header({ isOpen, setIsOpen }) {
             >
                 sano.
             </h1>
+            {/* User/profile icon to open sidebar */}
             <svg onClick={() => setIsOpen(true)} className="cursor-pointer hover:opacity-60 duration-300" width="40px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"> {/*https://www.svgrepo.com/svg/369033/user-circle*/}
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -20,6 +27,7 @@ function Header({ isOpen, setIsOpen }) {
                 </g>
             </svg>
         </header>
+        {/* Sidebar component */}
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         </>
     );

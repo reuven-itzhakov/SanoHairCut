@@ -1,9 +1,16 @@
+// times.js
+// API routes for managing available appointment times.
+// Requires Firestore database instance (db) and Firebase Admin SDK (admin).
+
 const express = require("express");
 
 module.exports = (db, admin) => {
   const router = express.Router();
 
   // Get available times for a specific date
+  // GET /available-times/:date
+  // Returns an array of available times for the given date.
+  // For today, removes times that have already passed (Israel time) and updates the DB.
   router.get("/available-times/:date", async (req, res) => {
     try {
       const doc = await db.collection("availableTimes").doc(req.params.date).get();
@@ -28,6 +35,10 @@ module.exports = (db, admin) => {
   });
 
   // Admin: Set available times for a specific date (replace times)
+  // POST /admin/available-times
+  // Body: { uid, date, times }
+  // Only allows if the user is an admin (checked via custom claims).
+  // Overwrites the available times for the given date with the provided array (sorted).
   router.post("/admin/available-times", async (req, res) => {
     const { uid, date, times } = req.body;
     if (!uid || !date || !Array.isArray(times)) {

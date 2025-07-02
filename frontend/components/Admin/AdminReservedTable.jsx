@@ -1,3 +1,8 @@
+// AdminReservedTable.jsx
+// Admin table for viewing, sorting, editing, and deleting reserved appointments.
+// Allows inline editing of appointment date/time and deletion of appointments.
+// Uses axios for API calls and dayjs for date formatting.
+
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -12,6 +17,7 @@ function AdminReservedTable({ axios }) {
   const [newDate, setNewDate] = useState('');
   const [newTime, setNewTime] = useState('');
 
+  // Fetch appointments on mount
   useEffect(() => {
     setLoading(true);
     axios.get('http://localhost:5000/api/appointments')
@@ -27,6 +33,7 @@ function AdminReservedTable({ axios }) {
       .finally(() => setLoading(false));
   }, [axios]);
 
+  // Handle sorting by column
   const handleSort = (key) => {
     setSortConfig((prev) => {
       if (prev.key === key) {
@@ -36,6 +43,7 @@ function AdminReservedTable({ axios }) {
     });
   };
 
+  // Delete an appointment
   const handleDelete = async (userId) => {
     if (!window.confirm('Are you sure you want to delete this appointment?')) return;
     try {
@@ -46,20 +54,24 @@ function AdminReservedTable({ axios }) {
     }
   };
 
+  // Start editing a row
   const handleDateEdit = (idx, currentDate, currentTime) => {
     setEditingIdx(idx);
     setNewDate(currentDate);
     setNewTime(currentTime);
   };
 
+  // Handle date input change
   const handleDateChange = (e) => {
     setNewDate(e.target.value);
   };
 
+  // Handle time input change
   const handleTimeChange = (e) => {
     setNewTime(e.target.value);
   };
 
+  // Save the edited date/time
   const handleDateSave = async (appt) => {
     try {
       await axios.post(`http://localhost:5000/api/appointments/${appt.userId}/change-date`, {
@@ -73,6 +85,7 @@ function AdminReservedTable({ axios }) {
     }
   };
 
+  // Sort appointments by selected column
   const sortedAppointments = [...appointments].sort((a, b) => {
     if (!sortConfig.key) return 0;
     let aValue = a[sortConfig.key];
@@ -93,12 +106,14 @@ function AdminReservedTable({ axios }) {
     return 0;
   });
 
+  // Render loading, error, or the appointments table
   if (loading) return <div>{t('adminReservedTable.loading')}</div>;
   if (error) return <div className="text-red-600">{t('adminReservedTable.error')}</div>;
   if (!appointments.length) return <div>{t('adminReservedTable.noAppointments')}</div>;
 
   return (
     <div className="overflow-x-auto">
+      {/* Instructions for admin */}
       <div className="mb-3 text-gray-700 text-sm">
         {t('adminReservedTable.instructions')}
       </div>
@@ -124,6 +139,7 @@ function AdminReservedTable({ axios }) {
                 <td className="px-4 py-2 border">{dayName}</td>
                 <td className="px-4 py-2 border">
                   {editingIdx === idx ? (
+                    // Inline date input for editing
                     <input
                       type="date"
                       value={newDate}
@@ -138,6 +154,7 @@ function AdminReservedTable({ axios }) {
                 </td>
                 <td className="px-4 py-2 border">
                   {editingIdx === idx ? (
+                    // Inline time input for editing
                     <input
                       type="time"
                       value={newTime}
@@ -152,6 +169,7 @@ function AdminReservedTable({ axios }) {
                 </td>
                 <td className="px-4 py-2 border text-center">
                   {editingIdx === idx ? (
+                    // Save/cancel buttons for editing
                     <>
                       <button onClick={() => handleDateSave(appt)} className="text-green-600 hover:underline mr-2">{t('adminReservedTable.save')}</button>
                       <button onClick={() => setEditingIdx(null)} className="text-gray-600 hover:underline">{t('adminReservedTable.cancel')}</button>

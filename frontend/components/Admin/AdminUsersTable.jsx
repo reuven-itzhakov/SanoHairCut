@@ -1,14 +1,20 @@
+// AdminUsersTable.jsx
+// Admin table for viewing and editing user accounts.
+// Allows admin to edit user name, email, and admin status.
+// Uses axios for API calls and i18n for translations.
+
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 function AdminUsersTable({ axios }) {
   const { t } = useTranslation();
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [editingIdx, setEditingIdx] = useState(null);
-  const [editUser, setEditUser] = useState({ name: '', email: '', isAdmin: false });
+  const [users, setUsers] = useState([]); // List of users
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(''); // Error message
+  const [editingIdx, setEditingIdx] = useState(null); // Index of user being edited
+  const [editUser, setEditUser] = useState({ name: '', email: '', isAdmin: false }); // Edit form state
 
+  // Fetch all users on mount
   useEffect(() => {
     setLoading(true);
     axios.get('http://localhost:5000/api/users')
@@ -23,6 +29,7 @@ function AdminUsersTable({ axios }) {
       .finally(() => setLoading(false));
   }, [axios]);
 
+  // Start editing a user row
   const handleEdit = (idx, user) => {
     setEditingIdx(idx);
     setEditUser({
@@ -32,6 +39,7 @@ function AdminUsersTable({ axios }) {
     });
   };
 
+  // Handle input changes for editing
   const handleEditChange = (e) => {
     const { name, value, type, checked } = e.target;
     setEditUser(prev => ({
@@ -40,6 +48,7 @@ function AdminUsersTable({ axios }) {
     }));
   };
 
+  // Save edited user info
   const handleEditSave = async (user) => {
     try {
       await axios.post(`http://localhost:5000/api/users/${user.uid}/update`, {
@@ -59,12 +68,14 @@ function AdminUsersTable({ axios }) {
     }
   };
 
+  // Render loading, error, or the users table
   if (loading) return <div>{t('adminUsersTable.loading')}</div>;
   if (error) return <div className="text-red-600">{t('adminUsersTable.error')}</div>;
   if (!users.length) return <div>{t('adminUsersTable.noUsers')}</div>;
 
   return (
     <div className="overflow-x-auto">
+      {/* Instructions for admin */}
       <div className="mb-3 text-gray-700 text-sm">
         {t('adminUsersTable.instructions')}
       </div>

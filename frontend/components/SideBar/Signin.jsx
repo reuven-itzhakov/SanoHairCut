@@ -1,3 +1,8 @@
+// Signin.jsx
+// Component for user sign-in form.
+// Handles authentication with Firebase Auth and displays errors.
+// Uses i18n for translations and supports switching to signup/reset password forms.
+
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.js";
@@ -12,6 +17,7 @@ function Signin({setTab}){
         error: ''
     });
 
+    // Handle form submission for sign-in
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (data.email.trim() === '' || data.password.trim() === '') {
@@ -38,6 +44,7 @@ function Signin({setTab}){
 
     return (
         <>
+            {/* Sign-in form UI */}
             <h1 className="font-bold text-center">{t('signin.title')}</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="email">{t('signin.email')}</label>
@@ -60,6 +67,7 @@ function Signin({setTab}){
                     placeholder={t('signin.passwordPlaceholder')}
                     className="w-full p-2 my-2 rounded"
                 />
+                {/* Links to switch to signup or reset password forms */}
                 <a onClick={() => setTab('signup')} className="cursor-pointer text-blue-600 hover:underline">{t('signin.createAccount')}</a>
                 <br/>
                 <a onClick={() => setTab('reset-password')} className="cursor-pointer text-blue-600 hover:underline">{t('signin.forgotPassword')}</a>

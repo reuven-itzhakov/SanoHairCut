@@ -6,12 +6,19 @@ import Guest from './SideBar/Guest.jsx';
 import { createContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
+// SideBar.jsx
+// Main sidebar component for navigation and authentication.
+// Shows user info, navigation tabs, and language switcher.
+// Handles opening/closing and renders Guest or User components based on auth state.
+// Uses i18n for translations.
+
 export const UserContext = createContext(null);
 
 function SideBar({isOpen, setIsOpen}) {
     const [ user, setUser ] = useContext(UserContext);
     const { t, i18n } = useTranslation();
 
+    // Effect to handle authentication state change
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
@@ -23,10 +30,12 @@ function SideBar({isOpen, setIsOpen}) {
     return(
         <div className={`fixed top-0 right-0 w-[300px] h-screen transition-transform -translate-x-full z-50 ${isOpen? 'translate-x-0' : 'translate-x-[300px]'}`}>
             <div className="flex flex-col h-screen bg-gray-200">
+                {/* Header section with title and close button */}
                 <div className="flow-root p-[5px]">
                     <h1 className="float-left text-xl font-bold p-4">{t('sidebar.title')}</h1>
                     <img onClick={() => setIsOpen(false)} width="30px" className="float-right cursor-pointer m-4" src="https://www.svgrepo.com/show/510165/right-arrow.svg" alt={t('sidebar.close')}></img>
                 </div>
+                {/* User or Guest component based on auth state */}
                 {user ? <User /> : <Guest />}
                 {/* Language Switcher at the bottom */}
                 <div className="mt-auto flex flex-row justify-center items-center gap-2 mb-4">

@@ -1,3 +1,8 @@
+// Signup.jsx
+// Component for user registration form.
+// Handles new user creation with Firebase Auth and displays errors.
+// Uses i18n for translations and supports switching to sign-in/reset password forms.
+
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from "../../firebase.js";
@@ -17,8 +22,10 @@ function Signup({setTab}){
         }
     );
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Validate input fields
         if (data.email.trim() === ''
         || data.password.trim() === ''
         || data.confirmPassword.trim() === ''
@@ -39,6 +46,7 @@ function Signup({setTab}){
             return;
         }
         try {
+            // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
             // Create user document in Firestore via backend
             await axios.post("http://localhost:5000/api/users", {
@@ -46,11 +54,14 @@ function Signup({setTab}){
                 name: data.name,
                 email: data.email
             });
+            // Send email verification
             await sendEmailVerification(userCredential.user);
+            // Clear form data
             setData({ email: '', password: '', confirmPassword: '', error: '' });
             // Optionally, show a message to check email for verification
         }
         catch (error) {
+            // Handle errors
             switch (error.code) {
                 case 'auth/email-already-in-use':
                     setData({ ...data, error: t('signup.error.emailInUse') });

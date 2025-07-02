@@ -1,3 +1,8 @@
+// Calendar.jsx
+// Custom calendar component for picking a date.
+// Used in admin and appointment flows for date selection.
+// Calls onDaySelect(day, month, year) when a day is selected.
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
@@ -100,6 +105,7 @@ function Calendar({ onDaySelect, adminMode = false }) {
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded shadow">
+      {/* Month navigation */}
       <div dir="ltr" className="flex justify-between items-center mb-2">
         <button onClick={prevMonth} className="px-2 py-1 bg-gray-200 rounded select-none" style={{ userSelect: 'none' }}>&#8592;</button>
         <h2 className="text-xl font-bold select-none" style={{ userSelect: 'none' }}>
@@ -107,10 +113,14 @@ function Calendar({ onDaySelect, adminMode = false }) {
         </h2>
         <button onClick={nextMonth} className="px-2 py-1 bg-gray-200 rounded select-none" style={{ userSelect: 'none' }}>&#8594;</button>
       </div>
+      {/* Day names header */}
       <div className="grid grid-cols-7 gap-1 text-center">
         {daysOfWeek.map((d, i) => (
           <div key={i} className="font-semibold text-gray-700 select-none" style={{ userSelect: 'none' }}>{d}</div>
         ))}
+      </div>
+      {/* Days grid */}
+      <div className="grid grid-cols-7 gap-1 text-center">
         {loadingDays ? (
           <div className="col-span-7 text-center py-8 text-gray-500">{t('calendar.loading')}</div>
         ) : (
@@ -141,6 +151,7 @@ function Calendar({ onDaySelect, adminMode = false }) {
           })
         )}
       </div>
+      {/* Selected day info */}
       {selectedDay && (
         <div className="mt-4 text-center text-lg font-semibold text-blue-700">
           {t('calendar.selected')}: {selectedDay}/{currentMonth + 1}/{currentYear}

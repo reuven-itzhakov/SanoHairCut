@@ -1,3 +1,7 @@
+// user.js
+// API routes for user management and profile operations.
+// Requires Firestore database instance (db) and Firebase Admin SDK (admin).
+
 const express = require("express");
 
 module.exports = (db, admin) => {
@@ -9,6 +13,8 @@ module.exports = (db, admin) => {
 
   // --- User Profile ---
   // Get user profile from Firebase Auth
+  // GET /profile/:uid
+  // Returns the user's UID, display name, email, and admin status.
   router.get("/profile/:uid", async (req, res) => {
     try {
       const userRecord = await admin.auth().getUser(req.params.uid);
@@ -24,6 +30,9 @@ module.exports = (db, admin) => {
   });
 
   // Update user profile (displayName in Firebase Auth)
+  // POST /profile/:uid
+  // Body: { name }
+  // Updates the user's display name in Firebase Auth.
   router.post("/profile/:uid", async (req, res) => {
     const { name } = req.body;
     if (!name) {
@@ -38,6 +47,8 @@ module.exports = (db, admin) => {
   });
 
   // Get all users (for admin)
+  // GET /users
+  // Returns a list of all users with UID, display name, email, and admin status.
   router.get("/users", async (req, res) => {
     try {
       let users = [];
@@ -59,6 +70,9 @@ module.exports = (db, admin) => {
   });
 
   // Update user info and admin status (for admin)
+  // POST /users/:uid/update
+  // Body: { name, email, isAdmin }
+  // Updates the user's display name, email, and admin status (custom claim).
   router.post("/users/:uid/update", async (req, res) => {
     const { name, email, isAdmin } = req.body;
     const { uid } = req.params;

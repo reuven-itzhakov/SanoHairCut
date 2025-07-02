@@ -5,7 +5,7 @@ const serviceAccount = require("./firebase-admin.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "manohaircut.appspot.com"
+  storageBucket: "sanohaircut.appspot.com"
 });
 
 const app = express();

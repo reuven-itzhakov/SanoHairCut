@@ -106,11 +106,11 @@ function HomePage({ setSidebarOpen, navigate }) {
             <div className="max-w-3xl mx-auto py-12 px-4 text-center">
                 <h2 className="text-xl font-bold mb-2">{t('home.contact.title')}</h2>
                 <p className="mb-2">{t('home.contact.address')}</p>
-                <p className="mb-2">{t('home.contact.phone')} <a href="tel:+972548343989" className="text-blue-600 underline">+972-54-8343-989</a></p>
+                <p className="mb-2">{t('home.contact.phone')} <a href="tel:+972528851342" className="text-blue-600 underline">+972-52-8851-342</a></p>
                 <div className="mt-4">
                     <iframe
                         title={t('home.contact.mapTitle')}
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2376.3276798275065!2d35.28308401349291!3d32.61591373701139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c53c7be9edd7b%3A0x59d44bdc468df1e9!2sLotem%20St%2026%2C%20Afula!5e0!3m2!1sen!2sil!4v1750775442826!5m2!1sen!2sil" // Replace with your real map embed link
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4513.687081173903!2d34.77436094929995!3d32.05721964385733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151d4c9e232f0b0d%3A0xd16c925987ea9537!2sWolfson%2C%20Tel%20Aviv-Jaffa!5e0!3m2!1sen!2sil!4v1751429691571!5m2!1sen!2sil"
                         width="100%"
                         height="200"
                         style={{ border: 0 }}
